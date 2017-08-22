@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { graphql, gql } from 'react-apollo';
 import Link from './Link';
 
 class LinkList extends Component {
   render() {
-    const linksToRender = [
-      {
-        id: '1',
-        description: 'The Coolest GraphQL Backend 😎',
-        url: 'https://www.graph.cool',
-      },
-      {
-        id: '2',
-        description: 'The Best GraphQL Client',
-        url: 'http://dev.apollodata.com/',
-      },
-    ];
+    if (this.props.allLinksQuery && this.props.allLinksQuery.loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
 
+    if (this.props.allLinksQuery && this.props.allLinksQuery.error) {
+      return (
+        <View style={styles.container}>
+          <Text>Error</Text>
+        </View>
+      );
+    }
+
+    const linksToRender = this.props.allLinksQuery.allLinks;
     return (
       <ScrollView style={styles.container}>
         {linksToRender.map(link => <Link key={link.id} link={link} />)}
@@ -29,6 +40,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
-export default LinkList;
+const ALL_LINKS_QUERY = gql`
+  query AllLinksQuery {
+    allLinks {
+      id
+      createdAt
+      url
+      description
+    }
+  }
+`;
+
+export default graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' })(LinkList);
