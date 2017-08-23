@@ -19,6 +19,10 @@ class LinkList extends Component {
     };
   };
 
+  state = {
+    refreshing: false,
+  };
+
   render() {
     if (this.props.allLinksQuery && this.props.allLinksQuery.loading) {
       return (
@@ -40,12 +44,23 @@ class LinkList extends Component {
     return (
       <FlatList
         data={this.props.allLinksQuery.allLinks}
-        style={styles.container}
         keyExtractor={link => link.id}
+        onRefresh={this._handleRefresh}
+        refreshing={this.state.refreshing}
         renderItem={({ item }) => <Link link={item} />}
+        style={styles.container}
       />
     );
   }
+
+  _handleRefresh = async () => {
+    try {
+      this.setState({ refreshing: true });
+      await this.props.allLinksQuery.refetch();
+    } finally {
+      this.setState({ refreshing: false });
+    }
+  };
 }
 
 const styles = StyleSheet.create({
