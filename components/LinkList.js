@@ -18,6 +18,11 @@ class LinkList extends Component {
     return {
       title: 'Hacker News',
       headerRight: <HeaderActions.Right navigation={props.navigation} />,
+      ...Platform.select({
+        ios: {
+          headerLeft: <HeaderActions.Left navigation={props.navigation} />,
+        },
+      }),
     };
   };
 

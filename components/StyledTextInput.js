@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     }),
   },
   lastInGroup: {
-    borderBottomWidth: 1,
+    borderBottomWidth: Platform.OS === 'ios' ? 1 : 0,
     marginBottom: 10,
   },
 });

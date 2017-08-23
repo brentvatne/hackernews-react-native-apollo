@@ -5,10 +5,10 @@ import { graphql, gql } from 'react-apollo';
 import StyledTextInput from './StyledTextInput';
 
 class CreateLink extends Component {
-  static navigationOptions = props => {
+  static navigationOptions = ({ navigation }) => {
     // navigationOptions is a static property, so we grab a reference to the
     // _createLink function on the component through the route params
-    const { params } = props.navigation.state;
+    const { params } = navigation.state;
     let onDonePress = params ? params.onDonePress : () => {};
 
     return {
@@ -56,7 +56,9 @@ class CreateLink extends Component {
         />
 
         {Platform.OS === 'android' &&
-          <Button color="#000" title="Submit" onPress={this._createLink} />}
+          <View style={styles.buttonContainer}>
+            <Button color="#000" title="Submit" onPress={this._createLink} />
+          </View>}
       </View>
     );
   }
@@ -78,6 +80,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
+  },
+  buttonContainer: {
+    marginHorizontal: 10,
   },
 });
 
