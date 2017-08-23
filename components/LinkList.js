@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   ActivityIndicator,
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
   View,
@@ -36,11 +36,13 @@ class LinkList extends Component {
       );
     }
 
-    const linksToRender = this.props.allLinksQuery.allLinks;
     return (
-      <ScrollView style={styles.container}>
-        {linksToRender.map(link => <Link key={link.id} link={link} />)}
-      </ScrollView>
+      <FlatList
+        data={this.props.allLinksQuery.allLinks}
+        style={styles.container}
+        keyExtractor={link => link.id}
+        renderItem={({ item }) => <Link link={item} />}
+      />
     );
   }
 }
