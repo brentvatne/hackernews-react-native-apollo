@@ -8,13 +8,22 @@ import {
 } from 'react-native';
 import { graphql, gql } from 'react-apollo';
 import Link from './Link';
+import LinkListHeaderRight from './LinkListHeaderRight';
 
 class LinkList extends Component {
+  static navigationOptions = props => {
+    return {
+      title: 'Hacker News',
+      headerRight: <LinkListHeaderRight navigation={props.navigation} />,
+    };
+  };
+
   render() {
     if (this.props.allLinksQuery && this.props.allLinksQuery.loading) {
       return (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator />
+          <ActivityIndicator size="large" />
+          <Text style={styles.loadingText}>Loading links...</Text>
         </View>
       );
     }
@@ -44,6 +53,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 60,
+  },
+  loadingText: {
+    marginTop: 5,
+    color: '#888',
   },
 });
 

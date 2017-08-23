@@ -3,6 +3,10 @@ import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { graphql, gql } from 'react-apollo';
 
 class CreateLink extends Component {
+  static navigationOptions = {
+    title: 'New Link',
+  };
+
   state = {
     description: '',
     url: '',
@@ -12,6 +16,7 @@ class CreateLink extends Component {
     return (
       <View style={styles.container}>
         <TextInput
+          autoCorrect={false}
           autoFocus={true}
           onChangeText={description => this.setState({ description })}
           onSubmitEditing={() => this._urlInput.focus()}
@@ -22,6 +27,7 @@ class CreateLink extends Component {
         />
         <TextInput
           autoCapitalize="none"
+          autoCorrect={false}
           keyboardType="url"
           onChangeText={url => this.setState({ url })}
           onSubmitEditing={this._createLink}
@@ -46,18 +52,21 @@ class CreateLink extends Component {
         url,
       },
     });
+
+    this.props.navigation.goBack();
   };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 15,
     paddingHorizontal: 5,
   },
   inputField: {
     marginBottom: 5,
     padding: 10,
+    backgroundColor: '#fff',
     borderColor: '#eee',
     borderWidth: 1,
   },
