@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Constants } from 'expo';
+
+import Colors from '../constants/Colors';
 import RootStackNavigator from './RootStackNavigator';
 
 export default class HackerNews extends Component {
@@ -18,6 +20,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS === 'android' ? Constants.statusBarHeight : 0,
-    backgroundColor: Platform.OS === 'android' ? '#e64a19' : '#fff',
+    backgroundColor: Platform.OS === 'android' ? Colors.darkOrange : '#fff',
   },
 });

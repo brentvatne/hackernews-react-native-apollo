@@ -1,25 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
-import { Icon } from 'expo';
 import Touchable from 'react-native-platform-touchable';
-
-const ButtonHitSlop = {
-  top: 10,
-  bottom: 10,
-  left: 5,
-  right: 5,
-};
-
-const IconNames = {
-  ...Platform.select({
-    ios: {
-      create: 'ios-create-outline',
-    },
-    android: {
-      create: 'md-create',
-    },
-  }),
-};
+import { Icon } from 'expo';
 
 class HeaderActionsRight extends Component {
   render() {
@@ -41,9 +23,22 @@ class HeaderActionsRight extends Component {
   }
 }
 
-export default {
-  Right: HeaderActionsRight,
-  Left: () => null,
+const ButtonHitSlop = {
+  top: 10,
+  bottom: 10,
+  left: 5,
+  right: 5,
+};
+
+const IconNames = {
+  ...Platform.select({
+    ios: {
+      create: 'ios-create-outline',
+    },
+    android: {
+      create: 'md-create',
+    },
+  }),
 };
 
 const styles = StyleSheet.create({
@@ -58,3 +53,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
 });
+
+export default {
+  Right: HeaderActionsRight,
+  Left: () => null,
+};

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
+
+import Colors from '../constants/Colors';
 import LinkList from './LinkList';
 import CreateLink from './CreateLink';
 
@@ -19,7 +21,7 @@ export default StackNavigator(
     navigationOptions: () => ({
       headerBackTitle: 'Back',
       headerStyle: {
-        backgroundColor: '#ff5722',
+        backgroundColor: Colors.orange,
       },
       headerTintColor: '#fff',
     }),
