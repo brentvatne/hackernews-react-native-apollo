@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { Button, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { graphql, gql } from 'react-apollo';
 
-import Colors from '../constants/Colors';
+import StyledTextInput from './StyledTextInput';
 
 class CreateLink extends Component {
-  static navigationOptions = (props) => {
+  static navigationOptions = props => {
+    // navigationOptions is a static property, so we grab a reference to the
+    // _createLink function on the component through the route params
     const { params } = props.navigation.state;
     let onDonePress = params ? params.onDonePress : () => {};
 
@@ -31,21 +33,17 @@ class CreateLink extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          autoCorrect={false}
+        <StyledTextInput
           autoFocus={true}
           onChangeText={description => this.setState({ description })}
           onSubmitEditing={() => this._urlInput.focus()}
           placeholder="A description for the link"
           returnKeyType="next"
-          style={styles.inputField}
-          underlineColorAndroid="#888"
-          selectionColor={Colors.orange}
           value={this.state.description}
         />
-        <TextInput
+        <StyledTextInput
+          lastStyledTextInputInGroup={true}
           autoCapitalize="none"
-          autoCorrect={false}
           keyboardType="url"
           onChangeText={url => this.setState({ url })}
           onSubmitEditing={this._createLink}
@@ -54,23 +52,13 @@ class CreateLink extends Component {
             this._urlInput = ref;
           }}
           returnKeyType="done"
-          style={[styles.inputField, styles.lastInputField]}
-          underlineColorAndroid="#888"
-          selectionColor={Colors.orange}
           value={this.state.url}
         />
 
-        {this._maybeRenderButton()}
+        {Platform.OS === 'android' &&
+          <Button color="#000" title="Submit" onPress={this._createLink} />}
       </View>
     );
-  }
-
-  _maybeRenderButton() {
-    if (Platform.OS === 'ios') {
-      return;
-    }
-
-    return <Button color="#000" title="Submit" onPress={this._createLink} />;
   }
 
   _createLink = async () => {
@@ -90,26 +78,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-  },
-  inputField: {
-    ...Platform.select({
-      ios: {
-        padding: 15,
-        backgroundColor: '#fff',
-        borderColor: '#eee',
-        borderWidth: 1,
-      },
-      android: {
-        fontSize: 16,
-        paddingVertical: 10,
-        paddingHorizontal: 5,
-        marginHorizontal: 5,
-      },
-    }),
-  },
-  lastInputField: {
-    borderTopWidth: 0,
-    marginBottom: 10,
   },
 });
 
