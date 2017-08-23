@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Platform,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import { graphql, gql } from 'react-apollo';
 
+import Colors from '../constants/Colors';
 import HeaderActions from './HeaderActions';
 import Link from './Link';
 
@@ -27,7 +29,10 @@ class LinkList extends Component {
     if (this.props.allLinksQuery && this.props.allLinksQuery.loading) {
       return (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" />
+          <ActivityIndicator
+            size="large"
+            color={Platform.OS === 'android' ? Colors.orange : '#ccc'}
+          />
           <Text style={styles.loadingText}>Loading links...</Text>
         </View>
       );

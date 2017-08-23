@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { Button, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { graphql, gql } from 'react-apollo';
 
+import Colors from '../constants/Colors';
+
 class CreateLink extends Component {
-  static navigationOptions = {
-    title: 'New Link',
+  static navigationOptions = (props) => {
+    const { params } = props.navigation.state;
+    let onDonePress = params ? params.onDonePress : () => {};
+
+    return {
+      title: 'New Link',
+      headerRight:
+        Platform.OS === 'ios' &&
+        <Button color="#fff" title="Done" onPress={onDonePress} />,
+    };
   };
 
   state = {
     description: '',
     url: '',
   };
+
+  componentWillMount() {
+    this.props.navigation.setParams({
+      onDonePress: this._createLink,
+    });
+  }
 
   render() {
     return (
@@ -23,6 +39,8 @@ class CreateLink extends Component {
           placeholder="A description for the link"
           returnKeyType="next"
           style={styles.inputField}
+          underlineColorAndroid="#888"
+          selectionColor={Colors.orange}
           value={this.state.description}
         />
         <TextInput
@@ -36,12 +54,23 @@ class CreateLink extends Component {
             this._urlInput = ref;
           }}
           returnKeyType="done"
-          style={styles.inputField}
+          style={[styles.inputField, styles.lastInputField]}
+          underlineColorAndroid="#888"
+          selectionColor={Colors.orange}
           value={this.state.url}
         />
-        <Button title="Submit" onPress={this._createLink} />
+
+        {this._maybeRenderButton()}
       </View>
     );
+  }
+
+  _maybeRenderButton() {
+    if (Platform.OS === 'ios') {
+      return;
+    }
+
+    return <Button color="#000" title="Submit" onPress={this._createLink} />;
   }
 
   _createLink = async () => {
@@ -61,14 +90,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    paddingHorizontal: 5,
   },
   inputField: {
-    marginBottom: 5,
-    padding: 10,
-    backgroundColor: '#fff',
-    borderColor: '#eee',
-    borderWidth: 1,
+    ...Platform.select({
+      ios: {
+        padding: 15,
+        backgroundColor: '#fff',
+        borderColor: '#eee',
+        borderWidth: 1,
+      },
+      android: {
+        fontSize: 16,
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+        marginHorizontal: 5,
+      },
+    }),
+  },
+  lastInputField: {
+    borderTopWidth: 0,
+    marginBottom: 10,
   },
 });
 
