@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
+import { WebBrowser } from 'expo';
 
 class Link extends Component {
   render() {
     return (
-      <Touchable style={styles.container}>
+      <Touchable style={styles.container} onPress={this._openBrowser}>
         <View>
           <Text style={styles.description}>
             {this.props.link.description}
@@ -17,6 +18,15 @@ class Link extends Component {
       </Touchable>
     );
   }
+
+  _openBrowser = () => {
+    let url = this.props.link.url;
+    if (!url.includes('http')) {
+      alert('Unable to open invalid url');
+    } else {
+      WebBrowser.openBrowserAsync(this.props.link.url);
+    }
+  };
 
   _voteForLink = async () => {
     // ... you'll implement this in chapter 6
