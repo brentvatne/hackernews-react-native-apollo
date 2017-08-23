@@ -7,14 +7,15 @@ import {
   View,
 } from 'react-native';
 import { graphql, gql } from 'react-apollo';
+
+import HeaderActions from './HeaderActions';
 import Link from './Link';
-import LinkListHeaderRight from './LinkListHeaderRight';
 
 class LinkList extends Component {
   static navigationOptions = props => {
     return {
       title: 'Hacker News',
-      headerRight: <LinkListHeaderRight navigation={props.navigation} />,
+      headerRight: <HeaderActions.Right navigation={props.navigation} />,
     };
   };
 

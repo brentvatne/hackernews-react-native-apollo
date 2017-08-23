@@ -10,7 +10,7 @@ const ButtonHitSlop = {
   right: 5,
 }
 
-export default class LinkListHeaderRight extends Component {
+class HeaderActionsRight extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -26,6 +26,11 @@ export default class LinkListHeaderRight extends Component {
       </View>
     );
   }
+}
+
+export default {
+  Right: HeaderActionsRight,
+  Left: () => null,
 }
 
 const styles = StyleSheet.create({
