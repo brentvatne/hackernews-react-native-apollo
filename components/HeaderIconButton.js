@@ -10,10 +10,10 @@ export default class HeaderIconButton extends Component {
     return (
       <Touchable
         hitSlop={{
-          top: 10,
-          bottom: 10,
-          left: 5,
-          right: 5,
+          top: 15,
+          bottom: 15,
+          left: 10,
+          right: 10,
         }}
         background={Touchable.Ripple('#fff', true)}
         style={styles.button}
@@ -21,7 +21,7 @@ export default class HeaderIconButton extends Component {
         <Icon.Ionicons
           name={presetIconName || this.props.name}
           style={{ color: '#fff' }}
-          size={28}
+          size={25}
         />
       </Touchable>
     );
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 15,
     paddingHorizontal: 5,
-    marginLeft: Platform.OS === 'ios' ? 10 : 15,
+    marginLeft: Platform.OS === 'ios' ? 12 : 15,
   },
 });

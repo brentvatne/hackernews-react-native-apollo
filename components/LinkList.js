@@ -91,7 +91,7 @@ class LinkList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e4e4e4',
+    backgroundColor: '#e8e8e8',
   },
   content: {
     paddingBottom: 10,

@@ -85,7 +85,7 @@ class Link extends Component {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#f9f9f9',
     marginTop: 5,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: '#eee',
@@ -101,14 +101,14 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 17,
     lineHeight: 25,
-    fontWeight: '500',
+    fontWeight: Platform.OS === 'ios' ? '500' : '400',
     paddingRight: 5,
   },
   number: {
     fontSize: 17,
     lineHeight: 25,
     color: '#a6a6a6',
-    fontWeight: '500',
+    fontWeight: Platform.OS === 'ios' ? '500' : '400',
     marginLeft: 10,
     marginRight: 5,
   },
