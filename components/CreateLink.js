@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Button, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { graphql, gql } from 'react-apollo';
+import { getUser } from 'react-native-authentication-helpers';
 
 import StyledTextInput from './StyledTextInput';
 
 class CreateLink extends Component {
   static navigationOptions = ({ navigation }) => {
-    // navigationOptions is a static property, so we grab a reference to the
-    // _createLink function on the component through the route params
     const { params } = navigation.state;
     let onDonePress = params ? params.onDonePress : () => {};
 
@@ -42,9 +41,9 @@ class CreateLink extends Component {
           value={this.state.description}
         />
         <StyledTextInput
-          lastStyledTextInputInGroup={true}
           autoCapitalize="none"
           keyboardType="url"
+          lastStyledTextInputInGroup={true}
           onChangeText={url => this.setState({ url })}
           onSubmitEditing={this._createLink}
           placeholder="The URL for the link"
@@ -64,11 +63,18 @@ class CreateLink extends Component {
   }
 
   _createLink = async () => {
+    let user = getUser();
+    if (!user) {
+      console.error('No user logged in');
+      return;
+    }
+
     const { description, url } = this.state;
     await this.props.createLinkMutation({
       variables: {
         description,
         url,
+        postedById: user.id,
       },
     });
 
@@ -87,12 +93,20 @@ const styles = StyleSheet.create({
 });
 
 const CREATE_LINK_MUTATION = gql`
-  mutation CreateLinkMutation($description: String!, $url: String!) {
-    createLink(description: $description, url: $url) {
+  mutation CreateLinkMutation(
+    $description: String!
+    $url: String!
+    $postedById: ID!
+  ) {
+    createLink(description: $description, url: $url, postedById: $postedById) {
       id
       createdAt
       url
       description
+      postedBy {
+        id
+        name
+      }
     }
   }
 `;

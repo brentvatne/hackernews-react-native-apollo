@@ -9,9 +9,10 @@ export default class StyledTextInput extends React.Component {
 
     return (
       <TextInput
-        underlineColorAndroid="#888"
-        selectionColor={Colors.orange}
         autoCorrect={false}
+        ref={view => { this._input = view; }}
+        selectionColor={Colors.orange}
+        underlineColorAndroid="#888"
         {...props}
         style={[
           styles.input,
@@ -20,6 +21,10 @@ export default class StyledTextInput extends React.Component {
         ]}
       />
     );
+  }
+
+  focus() {
+    this._input.focus();
   }
 }
 

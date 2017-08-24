@@ -7,6 +7,8 @@ import {
   Text,
   View,
 } from 'react-native';
+import { gql, graphql, compose } from 'react-apollo';
+import { setUser } from 'react-native-authentication-helpers';
 
 import Colors from '../constants/Colors';
 import StyledTextInput from './StyledTextInput';
@@ -17,8 +19,6 @@ function inSignUpState(navigationState) {
 
 class Authentication extends Component {
   static navigationOptions = ({ navigation }) => {
-    // navigationOptions is a static property, so we grab a reference to the
-    // _create function on the component through the route params
     const { params } = navigation.state;
     let onSubmitPress = params ? params.onSubmitPress : () => {};
 
@@ -53,19 +53,33 @@ class Authentication extends Component {
               autoFocus={true}
               value={this.state.name}
               onChangeText={name => this.setState({ name })}
+              onSubmitEditing={() => this._emailInput.focus()}
               type="text"
               placeholder="Your name"
             />}
           <StyledTextInput
+            autoCapitalize="none"
             autoFocus={true}
+            ref={view => {
+              this._emailInput = view;
+            }}
+            keyboardType="email-address"
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
+            onSubmitEditing={() => this._passwordInput.focus()}
             type="text"
             placeholder="Your email address"
           />
           <StyledTextInput
             lastStyledTextInputInGroup={true}
+            returnKeyType="go"
+            ref={view => {
+              this._passwordInput = view;
+            }}
             onChangeText={password => this.setState({ password })}
+            onSubmitEditing={this._confirm}
+            blurOnSubmit={true}
+            secureTextEntry={true}
             type="password"
             placeholder="Choose a safe password"
             value={this.state.password}
@@ -96,12 +110,39 @@ class Authentication extends Component {
   }
 
   _confirm = async () => {
-    // ... you'll implement this in a bit
+    const { name, email, password } = this.state;
+    try {
+      if (inSignUpState(this.props.navigation.state)) {
+        const result = await this.props.createUserMutation({
+          variables: {
+            name,
+            email,
+            password,
+          },
+        });
+        const id = result.data.signinUser.user.id;
+        const token = result.data.signinUser.token;
+        this._saveUserData(id, token);
+      } else {
+        const result = await this.props.signinUserMutation({
+          variables: {
+            email,
+            password,
+          },
+        });
+        const id = result.data.signinUser.user.id;
+        const token = result.data.signinUser.token;
+        this._saveUserData(id, token);
+      }
+
+      this.props.navigation.goBack();
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
   _saveUserData = (id, token) => {
-    // localStorage.setItem(GC_USER_ID, id);
-    // localStorage.setItem(GC_AUTH_TOKEN, token);
+    setUser({ id, token });
   };
 }
 
@@ -121,4 +162,39 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Authentication;
+const CREATE_USER_MUTATION = gql`
+  mutation CreateUserMutation(
+    $name: String!
+    $email: String!
+    $password: String!
+  ) {
+    createUser(
+      name: $name
+      authProvider: { email: { email: $email, password: $password } }
+    ) {
+      id
+    }
+    signinUser(email: { email: $email, password: $password }) {
+      token
+      user {
+        id
+      }
+    }
+  }
+`;
+
+const SIGNIN_USER_MUTATION = gql`
+  mutation SigninUserMutation($email: String!, $password: String!) {
+    signinUser(email: { email: $email, password: $password }) {
+      token
+      user {
+        id
+      }
+    }
+  }
+`;
+
+export default compose(
+  graphql(CREATE_USER_MUTATION, { name: 'createUserMutation' }),
+  graphql(SIGNIN_USER_MUTATION, { name: 'signinUserMutation' })
+)(Authentication);

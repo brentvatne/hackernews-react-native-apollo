@@ -2444,7 +2444,7 @@ hoek@4.x.x:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.0.tgz#72d9d0754f7fe25ca2d01ad8f8f9a9449a89526d"
 
-hoist-non-react-statics@^2.2.0, hoist-non-react-statics@^2.2.1:
+hoist-non-react-statics@^2.2.0, hoist-non-react-statics@^2.2.1, hoist-non-react-statics@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.3.0.tgz#ede16318c2ff1f9fe3a025396ba06fd4c44608bb"
 
@@ -4252,6 +4252,13 @@ react-devtools-core@2.3.1:
   dependencies:
     shell-quote "^1.6.1"
     ws "^2.0.3"
+
+react-native-authentication-helpers@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-authentication-helpers/-/react-native-authentication-helpers-0.1.0.tgz#9e249c62fa9154fcfd198242492948f990d90010"
+  dependencies:
+    fbemitter "^2.1.1"
+    hoist-non-react-statics "^2.3.0"
 
 react-native-branch@2.0.0-beta.3:
   version "2.0.0-beta.3"

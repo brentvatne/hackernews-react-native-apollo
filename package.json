@@ -23,6 +23,7 @@
     "react": "16.0.0-alpha.12",
     "react-apollo": "^1.4.14",
     "react-native": "^0.47.0",
+    "react-native-authentication-helpers": "^0.1.0",
     "react-native-platform-touchable": "^1.1.1",
     "react-navigation": "1.0.0-beta.12"
   }

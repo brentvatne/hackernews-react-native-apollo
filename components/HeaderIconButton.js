@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import Touchable from 'react-native-platform-touchable';
 import { Icon } from 'expo';
+import Touchable from 'react-native-platform-touchable';
 
 export default class HeaderIconButton extends Component {
   render() {
