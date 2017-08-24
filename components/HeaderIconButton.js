@@ -15,7 +15,7 @@ export default class HeaderIconButton extends Component {
           left: 5,
           right: 5,
         }}
-        background={Touchable.Ripple('#555', true)}
+        background={Touchable.Ripple('#fff', true)}
         style={styles.button}
         onPress={this.props.onPress}>
         <Icon.Ionicons
@@ -32,9 +32,11 @@ const IconNames = {
   ...Platform.select({
     ios: {
       create: 'ios-create-outline',
+      search: 'ios-search-outline',
     },
     android: {
       create: 'md-create',
+      search: 'md-search',
     },
   }),
   authenticate: 'md-key',
@@ -44,6 +46,6 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 15,
     paddingHorizontal: 5,
-    marginLeft: 10,
+    marginLeft: Platform.OS === 'ios' ? 10 : 15,
   },
 });

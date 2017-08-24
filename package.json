@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "expo": "^20.0.0",
+    "lodash": "^4.17.4",
     "react": "16.0.0-alpha.12",
     "react-apollo": "^1.4.14",
     "react-native": "^0.47.0",

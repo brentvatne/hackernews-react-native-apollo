@@ -7,19 +7,26 @@ import HeaderIconButton from './HeaderIconButton';
 
 class HeaderActionsRight extends Component {
   render() {
+    const { navigate } = this.props.navigation;
+
     return (
       <View style={styles.container}>
         {this.props.user &&
           <HeaderIconButton
             name="create"
-            onPress={() => this.props.navigation.navigate('CreateLink')}
+            onPress={() => navigate('CreateLink')}
           />}
+
+        <HeaderIconButton
+          name="search"
+          onPress={() => navigate('Search')}
+        />
 
         {Platform.OS === 'android' &&
           !this.props.user &&
           <HeaderIconButton
             name="authenticate"
-            onPress={() => this.props.navigation.navigate('Authentication')}
+            onPress={() => navigate('Authentication')}
           />}
       </View>
     );
