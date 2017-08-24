@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { gql, graphql, compose } from 'react-apollo';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Button from 'react-native-platform-button';
 import { setUser } from 'react-native-authentication-helpers';
+import { gql, graphql, compose } from 'react-apollo';
 
 import Colors from '../constants/Colors';
 import StyledTextInput from './StyledTextInput';
@@ -26,7 +20,12 @@ class Authentication extends Component {
       title: inSignUpState(navigation.state) ? 'Sign Up' : 'Sign In',
       headerRight:
         Platform.OS === 'ios' &&
-        <Button color="#fff" title="Submit" onPress={onSubmitPress} />,
+        <Button
+          fontSize={17}
+          color="#fff"
+          title="Submit"
+          onPress={onSubmitPress}
+        />,
     };
   };
 

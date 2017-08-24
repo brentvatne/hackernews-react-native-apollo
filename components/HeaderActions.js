@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { withUser, clearUser } from 'react-native-authentication-helpers';
+import Button from 'react-native-platform-button';
 
 import HeaderIconButton from './HeaderIconButton';
 
@@ -34,8 +35,14 @@ class HeaderActionsLeft extends Component {
     return (
       <View style={styles.container}>
         {this.props.user
-          ? <Button title="Sign Out" color="#fff" onPress={clearUser} />
+          ? <Button
+              fontSize={17}
+              title="Sign Out"
+              color="#fff"
+              onPress={clearUser}
+            />
           : <Button
+              fontSize={17}
               title="Sign In"
               color="#fff"
               onPress={() => this.props.navigation.navigate('Authentication')}

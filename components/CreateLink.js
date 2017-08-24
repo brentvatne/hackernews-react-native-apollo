@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Platform, StyleSheet, TextInput, View } from 'react-native';
+import { Platform, StyleSheet, TextInput, View } from 'react-native';
+import Button from 'react-native-platform-button';
 import { graphql, gql } from 'react-apollo';
 import { getUser } from 'react-native-authentication-helpers';
 
 import StyledTextInput from './StyledTextInput';
+import { ALL_LINKS_QUERY } from './LinkList';
 
 class CreateLink extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -14,7 +16,12 @@ class CreateLink extends Component {
       title: 'New Link',
       headerRight:
         Platform.OS === 'ios' &&
-        <Button color="#fff" title="Done" onPress={onDonePress} />,
+        <Button
+          fontSize={17}
+          color="#fff"
+          title="Done"
+          onPress={onDonePress}
+        />,
     };
   };
 
@@ -75,6 +82,14 @@ class CreateLink extends Component {
         description,
         url,
         postedById: user.id,
+      },
+      update: (store, { data: { createLink } }) => {
+        const data = store.readQuery({ query: ALL_LINKS_QUERY });
+        data.allLinks.splice(0, 0, createLink);
+        store.writeQuery({
+          query: ALL_LINKS_QUERY,
+          data,
+        });
       },
     });
 

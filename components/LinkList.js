@@ -57,11 +57,26 @@ class LinkList extends Component {
         keyExtractor={link => link.id}
         onRefresh={this._handleRefresh}
         refreshing={this.state.refreshing}
-        renderItem={({ item }) => <Link link={item} />}
+        renderItem={({ item, index }) =>
+          <Link
+            updateStoreAfterVote={this._updateCacheAfterVote}
+            index={index}
+            link={item}
+          />}
         style={styles.container}
+        contentContainerStyle={styles.content}
       />
     );
   }
+
+  _updateCacheAfterVote = (store, createVote, linkId) => {
+    const data = store.readQuery({ query: ALL_LINKS_QUERY });
+
+    const votedLink = data.allLinks.find(link => link.id === linkId);
+    votedLink.votes = createVote.link.votes;
+
+    store.writeQuery({ query: ALL_LINKS_QUERY, data });
+  };
 
   _handleRefresh = async () => {
     try {
@@ -76,6 +91,10 @@ class LinkList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#e4e4e4',
+  },
+  content: {
+    paddingBottom: 10,
   },
   loadingContainer: {
     flex: 1,
@@ -89,13 +108,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const ALL_LINKS_QUERY = gql`
+export const ALL_LINKS_QUERY = gql`
   query AllLinksQuery {
     allLinks {
       id
       createdAt
       url
       description
+      postedBy {
+        id
+        name
+      }
+      votes {
+        id
+        user {
+          id
+        }
+      }
     }
   }
 `;
