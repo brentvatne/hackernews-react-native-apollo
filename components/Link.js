@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderLeftWidth: StyleSheet.hairlineWidth,
     borderRightWidth: StyleSheet.hairlineWidth,
-    borderColor: '#eee',
+    borderColor: '#dcdcdc',
   },
   meta: {
     fontSize: 12,
