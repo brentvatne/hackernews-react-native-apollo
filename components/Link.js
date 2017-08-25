@@ -11,14 +11,16 @@ class Link extends Component {
   render() {
     const { postedBy } = this.props.link;
     const postedByName = postedBy || 'Unknown';
+    const showNumbers = !this.props.hideNumbers;
 
     return (
       <Touchable style={styles.button} onPress={this._openBrowser}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.number}>
-              {this.props.index + 1}.
-            </Text>
+            {showNumbers &&
+              <Text style={styles.number}>
+                {this.props.index + 1}.
+              </Text>}
             <View>
               <Text style={styles.description}>
                 {this.props.link.description}
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     fontWeight: Platform.OS === 'ios' ? '500' : '400',
     paddingRight: 5,
+    paddingLeft: 10,
   },
   number: {
     fontSize: 17,
@@ -110,7 +113,6 @@ const styles = StyleSheet.create({
     color: '#a6a6a6',
     fontWeight: Platform.OS === 'ios' ? '500' : '400',
     marginLeft: 10,
-    marginRight: 5,
   },
   upvoteButton: {
     alignItems: 'center',
@@ -142,6 +144,7 @@ const styles = StyleSheet.create({
   url: {
     fontSize: 13,
     color: '#888',
+    paddingLeft: 10,
   },
 });
 
