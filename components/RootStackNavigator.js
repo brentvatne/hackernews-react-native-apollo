@@ -2,22 +2,22 @@ import React, { Component } from 'react';
 import { Animated, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-import Authentication from './Authentication';
+import AuthenticationScreen from './AuthenticationScreen';
 import Colors from '../constants/Colors';
-import CreateLink from './CreateLink';
-import LinkList from './LinkList';
-import Search from './Search';
+import CreateLinkScreen from './CreateLinkScreen';
+import LinksScreen from './LinksScreen';
+import SearchScreen from './SearchScreen';
 
 const MainStack = StackNavigator(
   {
     Links: {
-      screen: LinkList,
+      screen: LinksScreen,
     },
     CreateLink: {
-      screen: CreateLink,
+      screen: CreateLinkScreen,
     },
     Authentication: {
-      screen: Authentication,
+      screen: AuthenticationScreen,
     },
   },
   {
@@ -36,13 +36,13 @@ const MainStack = StackNavigator(
   }
 );
 
-const RootStack = StackNavigator(
+export default StackNavigator(
   {
     Main: {
       screen: MainStack,
     },
     Search: {
-      screen: Search,
+      screen: SearchScreen,
     },
   },
   {
@@ -62,5 +62,3 @@ const RootStack = StackNavigator(
     }
   }
 );
-
-export default RootStack;

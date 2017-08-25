@@ -11,7 +11,7 @@ function inSignUpState(navigationState) {
   return !!(navigationState.params && navigationState.params.signUp);
 }
 
-class Authentication extends Component {
+class AuthenticationScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
     let onSubmitPress = params ? params.onSubmitPress : () => {};
@@ -196,4 +196,4 @@ const SIGNIN_USER_MUTATION = gql`
 export default compose(
   graphql(CREATE_USER_MUTATION, { name: 'createUserMutation' }),
   graphql(SIGNIN_USER_MUTATION, { name: 'signinUserMutation' })
-)(Authentication);
+)(AuthenticationScreen);

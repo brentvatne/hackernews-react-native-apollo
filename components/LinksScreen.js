@@ -13,7 +13,7 @@ import Colors from '../constants/Colors';
 import HeaderActions from './HeaderActions';
 import Link from './Link';
 
-class LinkList extends Component {
+class LinksScreen extends Component {
   static navigationOptions = props => {
     return {
       title: 'Hacker News',
@@ -129,4 +129,4 @@ export const ALL_LINKS_QUERY = gql`
   }
 `;
 
-export default graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' })(LinkList);
+export default graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' })(LinksScreen);

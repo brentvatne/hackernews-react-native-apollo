@@ -5,9 +5,9 @@ import { graphql, gql } from 'react-apollo';
 import { getUser } from 'react-native-authentication-helpers';
 
 import StyledTextInput from './StyledTextInput';
-import { ALL_LINKS_QUERY } from './LinkList';
+import { ALL_LINKS_QUERY } from './LinksScreen';
 
-class CreateLink extends Component {
+class CreateLinkScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
     let onDonePress = params ? params.onDonePress : () => {};
@@ -127,5 +127,5 @@ const CREATE_LINK_MUTATION = gql`
 `;
 
 export default graphql(CREATE_LINK_MUTATION, { name: 'createLinkMutation' })(
-  CreateLink
+  CreateLinkScreen
 );
