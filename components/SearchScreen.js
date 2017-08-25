@@ -27,7 +27,6 @@ class SearchScreen extends React.Component {
           loading={this.state.loading}
           links={this.state.links}
           error={this.state.error}
-          onRefresh={this._executeSearch}
           onVote={() => {
             /* we will fill this in later! */
           }}

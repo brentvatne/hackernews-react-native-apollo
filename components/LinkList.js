@@ -37,7 +37,7 @@ export default class LinkList extends Component {
       <FlatList
         data={this.props.links}
         keyExtractor={link => link.id}
-        onRefresh={this._handleRefresh}
+        onRefresh={this.props.onRefresh}
         refreshing={!!this.props.refreshing}
         renderItem={({ item, index }) =>
           <Link
@@ -51,10 +51,6 @@ export default class LinkList extends Component {
       />
     );
   }
-
-  _handleRefresh = async () => {
-    await this.props.onRefresh();
-  };
 }
 
 const styles = StyleSheet.create({
