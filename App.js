@@ -4,6 +4,10 @@ import {
   createNetworkInterface,
   ApolloClient,
 } from 'react-apollo';
+import {
+  SubscriptionClient,
+  addGraphQLSubscriptions,
+} from 'subscriptions-transport-ws';
 import { AppLoading } from 'expo';
 import { getUser, loadUserAsync } from 'react-native-authentication-helpers';
 
@@ -26,8 +30,23 @@ networkInterface.use([
   },
 ]);
 
-const client = new ApolloClient({
+const wsClient = new SubscriptionClient(
+  'wss://subscriptions.us-west-2.graph.cool/v1/cj6nypgtb224m0143b2gstire',
+  {
+    reconnect: true,
+    connectionParams: {
+      authToken: getUser() && getUser().token,
+    },
+  }
+);
+
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
   networkInterface,
+  wsClient
+);
+
+const client = new ApolloClient({
+  networkInterface: networkInterfaceWithSubscriptions,
 });
 
 export default class App extends React.Component {
