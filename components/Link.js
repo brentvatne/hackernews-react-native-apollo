@@ -10,7 +10,7 @@ import timeDifferenceForDate from '../utils/timeDifferenceForDate';
 class Link extends Component {
   render() {
     const { postedBy } = this.props.link;
-    const postedByName = postedBy || 'Unknown';
+    const postedByName = (postedBy && postedBy.name) || 'Unknown';
     const showNumbers = !this.props.hideNumbers;
 
     return (
