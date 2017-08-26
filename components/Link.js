@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { gql, graphql } from 'react-apollo';
 import Touchable from 'react-native-platform-touchable';
@@ -7,7 +7,7 @@ import { withUser } from 'react-native-authentication-helpers';
 
 import timeDifferenceForDate from '../utils/timeDifferenceForDate';
 
-class Link extends Component {
+class Link extends PureComponent {
   render() {
     const { postedBy } = this.props.link;
     const postedByName = (postedBy && postedBy.name) || 'Unknown';
