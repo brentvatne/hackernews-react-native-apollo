@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Touchable from 'react-native-platform-touchable';
 
 import Colors from '../constants/Colors';
 import Link from './Link';
@@ -39,6 +40,7 @@ export default class LinkList extends Component {
         keyExtractor={link => link.id}
         onRefresh={this.props.onRefresh}
         refreshing={!!this.props.refreshing}
+        ListFooterComponent={this._renderFooter}
         renderItem={({ item, index }) =>
           <Link
             hideNumbers={this.props.hideNumbers}
@@ -51,6 +53,18 @@ export default class LinkList extends Component {
       />
     );
   }
+
+  _renderFooter = () => {
+    if (!this.props.canLoadMore || !this.props.onLoadMore) {
+      return null;
+    }
+
+    return (
+      <Touchable style={styles.loadMoreButton} onPress={this.props.onLoadMore}>
+        <Text style={styles.loadMoreText}>Load more</Text>
+      </Touchable>
+    );
+  };
 }
 
 const styles = StyleSheet.create({
@@ -59,7 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8e8e8',
   },
   content: {
-    paddingBottom: 10,
+    paddingBottom: 5,
   },
   loadingContainer: {
     alignItems: 'center',
@@ -68,6 +82,18 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 5,
+    color: '#888',
+  },
+  loadMoreButton: {
+    marginTop: 5,
+    paddingVertical: 15,
+    backgroundColor: '#f9f9f9',
+    borderColor: '#eee',
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadMoreText: {
     color: '#888',
   },
 });

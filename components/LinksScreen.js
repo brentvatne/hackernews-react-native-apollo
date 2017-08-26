@@ -5,6 +5,8 @@ import { graphql, gql } from 'react-apollo';
 import HeaderActions from './HeaderActions';
 import LinkList from './LinkList';
 
+const LINKS_PER_PAGE = 10;
+
 class LinksScreen extends Component {
   static navigationOptions = props => {
     return {
@@ -24,13 +26,18 @@ class LinksScreen extends Component {
   }
 
   render() {
-    const { allLinksQuery } = this.props;
+    const allLinksQuery = this.props.allLinksQuery || {};
 
     return (
       <LinkList
-        error={allLinksQuery && allLinksQuery.error}
-        loading={allLinksQuery && allLinksQuery.loading}
-        links={allLinksQuery && allLinksQuery.allLinks}
+        error={allLinksQuery.error}
+        loading={allLinksQuery.loading}
+        links={allLinksQuery.allLinks}
+        canLoadMore={
+          allLinksQuery.allLinks &&
+          allLinksQuery._allLinksMeta.count > allLinksQuery.allLinks.length
+        }
+        onLoadMore={this._handleLoadMore}
         onRefresh={this._handleRefresh}
         onVote={this._updateCacheAfterVote}
       />
@@ -130,22 +137,27 @@ class LinksScreen extends Component {
   };
 
   _updateCacheAfterVote = (store, createVote, linkId) => {
-    const data = store.readQuery({ query: ALL_LINKS_QUERY });
-
+    const data = store.readQuery({
+      query: ALL_LINKS_QUERY,
+      variables: this.props.allLinksQuery.variables,
+    });
     const votedLink = data.allLinks.find(link => link.id === linkId);
     votedLink.votes = createVote.link.votes;
-
     store.writeQuery({ query: ALL_LINKS_QUERY, data });
   };
 
   _handleRefresh = () => {
     return this.props.allLinksQuery.refetch();
   };
+
+  _handleLoadMore = () => {
+    this.props.loadMoreLinks();
+  };
 }
 
 export const ALL_LINKS_QUERY = gql`
-  query AllLinksQuery {
-    allLinks(orderBy: createdAt_DESC) {
+  query AllLinksQuery($first: Int, $skip: Int) {
+    allLinks(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       createdAt
       url
@@ -161,7 +173,47 @@ export const ALL_LINKS_QUERY = gql`
         }
       }
     }
+    _allLinksMeta {
+      count
+    }
   }
 `;
 
-export default graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' })(LinksScreen);
+export default graphql(ALL_LINKS_QUERY, {
+  name: 'allLinksQuery',
+  options: props => ({
+    variables: {
+      first: LINKS_PER_PAGE,
+      skip: 0,
+    },
+    fetchPolicy: 'network-only',
+  }),
+  props: ({ allLinksQuery }, ownProps) => {
+    let skip = 0;
+    if (allLinksQuery.allLinks) {
+      skip = allLinksQuery.allLinks.length;
+    }
+
+    return {
+      allLinksQuery,
+      ...ownProps,
+      loadMoreLinks: () => {
+        return allLinksQuery.fetchMore({
+          variables: {
+            first: LINKS_PER_PAGE,
+            skip,
+          },
+          updateQuery: (previous, { fetchMoreResult }) => {
+            if (!fetchMoreResult.allLinks) {
+              return previous;
+            }
+            return Object.assign({}, previous, {
+              allLinks: [...previous.allLinks, ...fetchMoreResult.allLinks],
+              _allLinksMeta: fetchMoreResult._allLinksMeta,
+            });
+          },
+        });
+      },
+    };
+  },
+})(LinksScreen);
