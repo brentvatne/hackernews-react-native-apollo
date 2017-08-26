@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View, Text } from 'react-native';
 import { graphql, gql } from 'react-apollo';
 
 import HeaderActions from './HeaderActions';
@@ -7,10 +7,33 @@ import LinkList from './LinkList';
 
 const LINKS_PER_PAGE = 10;
 
+class Title extends React.PureComponent {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row' }}>
+          <Text
+            style={{
+              fontSize: 17,
+              color: '#fff',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: '500',
+            }}>
+            Hacker News
+          </Text>
+          <Text style={{ fontSize: 10, alignSelf: 'center', marginLeft: 3, color: '#fff' }}>▼</Text>
+        </View>
+        <Text style={{ fontSize: 13, color: '#eee', marginTop: -1 }}>Newest Links</Text>
+      </View>
+    );
+  }
+}
+
 class LinksScreen extends Component {
   static navigationOptions = props => {
     return {
-      title: 'Hacker News',
+      headerTitle: <Title navigation={props.navigation} />,
       headerRight: <HeaderActions.Right navigation={props.navigation} />,
       ...Platform.select({
         ios: {
