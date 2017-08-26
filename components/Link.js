@@ -14,7 +14,10 @@ class Link extends PureComponent {
     const showNumbers = !this.props.hideNumbers;
 
     return (
-      <Touchable style={styles.button} onPress={this._openBrowser}>
+      <Touchable
+        style={styles.button}
+        onPress={this._openBrowser}
+        delayPressIn={130}>
         <View style={styles.container}>
           <View style={styles.header}>
             {showNumbers &&
