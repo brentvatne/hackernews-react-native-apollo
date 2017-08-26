@@ -117,11 +117,12 @@ const CREATE_LINK_MUTATION = gql`
     $url: String!
     $postedById: ID!
   ) {
-    createLink(description: $description, url: $url, postedById: $postedById) {
+    createLink(description: $description, url: $url, score: 0, postedById: $postedById) {
       id
       createdAt
       url
       description
+      score
       postedBy {
         id
         name

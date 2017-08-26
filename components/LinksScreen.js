@@ -55,6 +55,7 @@ class LinksScreen extends Component {
                 url
                 description
                 createdAt
+                score
                 postedBy {
                   id
                   name
@@ -115,6 +116,7 @@ export const ALL_LINKS_QUERY = gql`
       createdAt
       url
       description
+      score
       postedBy {
         id
         name

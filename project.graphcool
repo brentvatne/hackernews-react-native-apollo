@@ -1,5 +1,5 @@
 # project: cj6nypgtb224m0143b2gstire
-# version: 6
+# version: 23
 
 type Link implements Node {
   url: String!
@@ -9,6 +9,7 @@ type Link implements Node {
   updatedAt: DateTime!
   postedBy: User @relation(name: "UsersLinks")
   votes: [Vote!]! @relation(name: "VotesOnLink")
+  score: Int
 }
 
 type File implements Node {
