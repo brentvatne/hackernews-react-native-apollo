@@ -5,7 +5,14 @@ import Touchable from 'react-native-platform-touchable';
 
 export default class HeaderIconButton extends Component {
   render() {
-    let presetIconName = IconNames[this.props.name];
+    let presetIconName = this.props.name;
+    let presetIconSize = 25;
+
+    let presetIcon = IconNames[this.props.name];
+    if (presetIcon) {
+      presetIconName = presetIcon.name;
+      presetIconSize = presetIcon.size;
+    }
 
     return (
       <Touchable
@@ -19,9 +26,9 @@ export default class HeaderIconButton extends Component {
         style={styles.button}
         onPress={this.props.onPress}>
         <Icon.Ionicons
-          name={presetIconName || this.props.name}
+          name={presetIconName}
           style={{ color: '#fff' }}
-          size={25}
+          size={presetIconSize}
         />
       </Touchable>
     );
@@ -31,15 +38,30 @@ export default class HeaderIconButton extends Component {
 const IconNames = {
   ...Platform.select({
     ios: {
-      create: 'ios-create-outline',
-      search: 'ios-search-outline',
+      create: {
+        name: 'ios-add-outline',
+        size: 33,
+      },
+      search: {
+        name: 'ios-search-outline',
+        size: 25,
+      },
     },
     android: {
-      create: 'md-create',
-      search: 'md-search',
+      create: {
+        name: 'md-create',
+        size: 25,
+      },
+      search: {
+        name: 'md-search',
+        size: 25,
+      },
     },
   }),
-  authenticate: 'md-key',
+  authenticate: {
+    name: 'md-key',
+    size: 25,
+  },
 };
 
 const styles = StyleSheet.create({
