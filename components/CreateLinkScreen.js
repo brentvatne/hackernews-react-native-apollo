@@ -84,10 +84,14 @@ class CreateLinkScreen extends Component {
         postedById: user.id,
       },
       update: (store, { data: { createLink } }) => {
-        const data = store.readQuery({ query: ALL_LINKS_QUERY });
+        const data = store.readQuery({
+          query: ALL_LINKS_QUERY,
+          variables: { skip: 0, first: 10 },
+        });
         data.allLinks.splice(0, 0, createLink);
         store.writeQuery({
           query: ALL_LINKS_QUERY,
+          variables: { skip: 0, first: 10 },
           data,
         });
       },
