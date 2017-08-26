@@ -21,7 +21,6 @@ class LinksScreen extends Component {
   };
 
   componentDidMount() {
-    this._subscribeToNewLinks();
     this._subscribeToNewVotes();
   }
 
@@ -43,52 +42,6 @@ class LinksScreen extends Component {
       />
     );
   }
-
-  _subscribeToNewLinks = () => {
-    this.props.allLinksQuery.subscribeToMore({
-      document: gql`
-        subscription {
-          Link(filter: { mutation_in: [CREATED] }) {
-            node {
-              id
-              url
-              description
-              createdAt
-              postedBy {
-                id
-                name
-              }
-              votes {
-                id
-                user {
-                  id
-                }
-              }
-            }
-          }
-        }
-      `,
-      updateQuery: (previous, { subscriptionData }) => {
-        const linkExists = previous.allLinks.find(
-          link => link.id === subscriptionData.data.Link.node.id
-        );
-
-        if (linkExists) {
-          return previous;
-        }
-
-        const newAllLinks = [
-          subscriptionData.data.Link.node,
-          ...previous.allLinks,
-        ];
-        const result = {
-          ...previous,
-          allLinks: newAllLinks,
-        };
-        return result;
-      },
-    });
-  };
 
   _subscribeToNewVotes = () => {
     this.props.allLinksQuery.subscribeToMore({
