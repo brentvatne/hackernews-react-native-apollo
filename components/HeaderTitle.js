@@ -1,5 +1,11 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export default class HeaderTitle extends PureComponent {
   render() {
@@ -15,7 +21,9 @@ export default class HeaderTitle extends PureComponent {
           <Text style={styles.title}>Hacker News</Text>
           <Text style={styles.arrow}>▼</Text>
         </View>
-        <Text style={styles.subtitle}>{listName} Links</Text>
+        <Text style={styles.subtitle}>
+          {listName} Links
+        </Text>
       </TouchableOpacity>
     );
   }
@@ -24,20 +32,32 @@ export default class HeaderTitle extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        alignItems: 'center',
+      },
+      android: {
+        paddingLeft: 15,
+      },
+    }),
   },
   title: {
-    fontSize: 17,
     color: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: '500',
+    ...Platform.select({
+      ios: {
+        fontSize: 17,
+        fontWeight: '500',
+      },
+      android: {
+        fontSize: 20,
+      },
+    }),
   },
   arrow: {
-    fontSize: 10,
+    fontSize: Platform.OS === 'ios' ? 10 : 15,
     alignSelf: 'center',
-    marginLeft: 3,
+    marginLeft: Platform.OS === 'ios' ? 3 : 5,
     color: '#fff',
   },
   subtitle: {
