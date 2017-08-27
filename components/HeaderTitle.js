@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 13,
     color: '#eee',
-    marginTop: -1,
+    marginTop: Platform.OS === 'ios' ? -1 : -3,
   },
 });

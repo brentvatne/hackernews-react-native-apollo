@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   menuOption: {
-    paddingVertical: 16,
-    alignItems: 'center',
+    padding: 16,
+    alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
   },
   selectedMenuOption: {
     backgroundColor: 'rgba(0,0,0,0.05)',

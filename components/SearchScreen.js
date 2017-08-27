@@ -21,6 +21,7 @@ class SearchScreen extends React.Component {
         headerTintColor="#fff"
         onChangeQuery={this._handleQueryChange}
         onSubmit={this._executeSearch}
+        searchInputPlaceholderTextColor={Platform.OS === 'ios' ? "#898989" : "#fafafa"}
         searchInputUnderlineColorAndroid="#f8f8f8">
         <LinkList
           hideNumbers={true}

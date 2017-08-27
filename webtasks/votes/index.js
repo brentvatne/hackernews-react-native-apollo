@@ -47,10 +47,12 @@ function calculateScore(link, now) {
     ageFactor = 0.8;
   } else if (hoursOld > 12 && hoursOld <= 24) {
     ageFactor = 0.5;
-  } else if (hoursOld > 24) {
+  } else if (hoursOld > 24 && hoursOld <= 48) {
     ageFactor = 0.2;
-  } else if (hoursOld > 48) {
+  } else if (hoursOld > 48 && hoursOld <= 72) {
     ageFactor = 0.05;
+  } else if (hoursOld > 72) {
+    ageFactor = 0.01;
   }
 
   return {

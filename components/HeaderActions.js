@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Dimensions, Platform, StyleSheet, View } from 'react-native';
 import { withUser, clearUser } from 'react-native-authentication-helpers';
 import Button from 'react-native-platform-button';
 
 import HeaderIconButton from './HeaderIconButton';
+const isSmallDevice = Dimensions.get('window').width < 375;
 
 class HeaderActionsRight extends Component {
   render() {
@@ -17,10 +18,7 @@ class HeaderActionsRight extends Component {
             onPress={() => navigate('CreateLink')}
           />}
 
-        <HeaderIconButton
-          name="search"
-          onPress={() => navigate('Search')}
-        />
+        <HeaderIconButton name="search" onPress={() => navigate('Search')} />
 
         {Platform.OS === 'android' &&
           !this.props.user &&
@@ -43,13 +41,13 @@ class HeaderActionsLeft extends Component {
       <View style={styles.container}>
         {this.props.user
           ? <Button
-              fontSize={17}
+              fontSize={isSmallDevice ? 15 : 17}
               title="Sign Out"
               color="#fff"
               onPress={clearUser}
             />
           : <Button
-              fontSize={17}
+              fontSize={isSmallDevice ? 15 : 17}
               title="Sign In"
               color="#fff"
               onPress={() => this.props.navigation.navigate('Authentication')}
@@ -62,7 +60,7 @@ class HeaderActionsLeft extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: isSmallDevice ? 5 : 10,
     flexDirection: 'row',
     alignItems: 'center',
   },

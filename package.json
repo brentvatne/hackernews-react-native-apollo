@@ -27,7 +27,7 @@
     "react-native-platform-button": "^0.1.0",
     "react-native-platform-touchable": "^1.1.1",
     "react-navigation": "1.0.0-beta.12",
-    "react-navigation-addon-search-layout": "^0.5.1",
+    "react-navigation-addon-search-layout": "^0.7.0",
     "subscriptions-transport-ws": "^0.8.2"
   }
 }
