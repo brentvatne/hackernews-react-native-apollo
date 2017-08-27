@@ -5,7 +5,7 @@ import { graphql, gql } from 'react-apollo';
 import { getUser } from 'react-native-authentication-helpers';
 
 import StyledTextInput from './StyledTextInput';
-import { ALL_LINKS_QUERY } from './LinksScreen';
+import { ALL_LINKS_QUERY } from './NewLinksList';
 
 class CreateLinkScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -84,16 +84,22 @@ class CreateLinkScreen extends Component {
         postedById: user.id,
       },
       update: (store, { data: { createLink } }) => {
-        const data = store.readQuery({
-          query: ALL_LINKS_QUERY,
-          variables: { skip: 0, first: 10 },
-        });
-        data.allLinks.splice(0, 0, createLink);
-        store.writeQuery({
-          query: ALL_LINKS_QUERY,
-          variables: { skip: 0, first: 10 },
-          data,
-        });
+        try {
+          const data = store.readQuery({
+            query: ALL_LINKS_QUERY,
+            variables: { skip: 0, first: 10 },
+          });
+          data.allLinks.splice(0, 0, createLink);
+          store.writeQuery({
+            query: ALL_LINKS_QUERY,
+            variables: { skip: 0, first: 10 },
+            data,
+          });
+        } catch (e) {
+          console.log(
+            "New links query has not been loaded, can't add newly created link to cache"
+          );
+        }
       },
     });
 
@@ -117,7 +123,12 @@ const CREATE_LINK_MUTATION = gql`
     $url: String!
     $postedById: ID!
   ) {
-    createLink(description: $description, url: $url, score: 0, postedById: $postedById) {
+    createLink(
+      description: $description
+      url: $url
+      score: 0
+      postedById: $postedById
+    ) {
       id
       createdAt
       url

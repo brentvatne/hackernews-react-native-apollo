@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   meta: {
     fontSize: 12,
     color: '#a6a6a6',
+    paddingHorizontal: 10,
   },
   url: {
     fontSize: 13,

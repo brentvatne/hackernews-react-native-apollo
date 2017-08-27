@@ -1,39 +1,38 @@
 import React, { Component } from 'react';
-import { Platform, View, Text } from 'react-native';
+import {
+  Animated,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { graphql, gql } from 'react-apollo';
+import Touchable from 'react-native-platform-touchable';
 
+import Colors from '../constants/Colors';
+import HeaderTitle from './HeaderTitle';
 import HeaderActions from './HeaderActions';
-import LinkList from './LinkList';
+import NewLinksList from './NewLinksList';
+import TopLinksList from './TopLinksList';
+import getNavigationParam from '../utils/getNavigationParam';
 
-const LINKS_PER_PAGE = 10;
+const DEFAULT_LIST = 'top';
 
-class Title extends React.PureComponent {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Text
-            style={{
-              fontSize: 17,
-              color: '#fff',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: '500',
-            }}>
-            Hacker News
-          </Text>
-          <Text style={{ fontSize: 10, alignSelf: 'center', marginLeft: 3, color: '#fff' }}>▼</Text>
-        </View>
-        <Text style={{ fontSize: 13, color: '#eee', marginTop: -1 }}>Newest Links</Text>
-      </View>
-    );
-  }
-}
-
-class LinksScreen extends Component {
+export default class LinksScreen extends Component {
   static navigationOptions = props => {
+    let onPressTitle = getNavigationParam(props.navigation, 'onPressTitle');
+    let selectedList = getNavigationParam(
+      props.navigation,
+      'selectedList',
+      DEFAULT_LIST
+    );
+
     return {
-      headerTitle: <Title navigation={props.navigation} />,
+      headerTitle: (
+        <HeaderTitle onPress={onPressTitle} selectedList={selectedList} />
+      ),
       headerRight: <HeaderActions.Right navigation={props.navigation} />,
       ...Platform.select({
         ios: {
@@ -43,155 +42,140 @@ class LinksScreen extends Component {
     };
   };
 
+  state = {
+    menuIsVisible: false,
+    menuAnimatedValue: new Animated.Value(0),
+  };
+
   componentDidMount() {
-    this._subscribeToNewVotes();
+    this.props.navigation.setParams({
+      onPressTitle: this._handlePressTitle,
+    });
   }
 
   render() {
-    const allLinksQuery = this.props.allLinksQuery || {};
+    let selectedList = getNavigationParam(
+      this.props.navigation,
+      'selectedList',
+      DEFAULT_LIST
+    );
+
+    let listEl;
+    if (selectedList === 'top') {
+      listEl = <TopLinksList />;
+    } else {
+      listEl = <NewLinksList />;
+    }
+
+    let overlayOpacity = this.state.menuAnimatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 0.4],
+    });
+
+    let menuTranslateY = this.state.menuAnimatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-300, 0],
+      extrapolate: 'clamp',
+    });
 
     return (
-      <LinkList
-        error={allLinksQuery.error}
-        loading={allLinksQuery.loading}
-        links={allLinksQuery.allLinks}
-        canLoadMore={
-          allLinksQuery.allLinks &&
-          allLinksQuery._allLinksMeta.count > allLinksQuery.allLinks.length
-        }
-        onLoadMore={this._handleLoadMore}
-        onRefresh={this._handleRefresh}
-        onVote={this._updateCacheAfterVote}
-      />
+      <View style={{ flex: 1 }}>
+        {listEl}
+        <View
+          style={StyleSheet.absoluteFill}
+          pointerEvents={this.state.menuIsVisible ? 'auto' : 'none'}>
+          <TouchableWithoutFeedback onPress={this._toggleMenu}>
+            <Animated.View
+              style={[styles.overlay, { opacity: overlayOpacity }]}
+            />
+          </TouchableWithoutFeedback>
+        </View>
+        <Animated.View
+          style={[
+            styles.menu,
+            { transform: [{ translateY: menuTranslateY }] },
+          ]}>
+          <Touchable
+            onPress={() => this._selectList('top')}
+            style={[
+              styles.menuOption,
+              selectedList === 'top' && styles.selectedMenuOption,
+            ]}>
+            <Text
+              style={[
+                styles.menuText,
+                selectedList === 'top' && styles.selectedMenuText,
+              ]}>
+              Top
+            </Text>
+          </Touchable>
+          <Touchable
+            onPress={() => this._selectList('new')}
+            style={[
+              styles.menuOption,
+              selectedList === 'new' && styles.selectedMenuOption,
+            ]}>
+            <Text
+              style={[
+                styles.menuText,
+                selectedList === 'new' && styles.selectedMenuText,
+              ]}>
+              New
+            </Text>
+          </Touchable>
+        </Animated.View>
+      </View>
     );
   }
 
-  _subscribeToNewVotes = () => {
-    this.props.allLinksQuery.subscribeToMore({
-      document: gql`
-        subscription {
-          Vote(filter: { mutation_in: [CREATED] }) {
-            node {
-              id
-              link {
-                id
-                url
-                description
-                createdAt
-                score
-                postedBy {
-                  id
-                  name
-                }
-                votes {
-                  id
-                  user {
-                    id
-                  }
-                }
-              }
-              user {
-                id
-              }
-            }
-          }
-        }
-      `,
-      updateQuery: (previous, { subscriptionData }) => {
-        const votedLinkIndex = previous.allLinks.findIndex(
-          link => link.id === subscriptionData.data.Vote.node.link.id
-        );
-        const link = subscriptionData.data.Vote.node.link;
-        const newAllLinks = previous.allLinks.slice();
-        newAllLinks[votedLinkIndex] = link;
-        const result = {
-          ...previous,
-          allLinks: newAllLinks,
-        };
-        return result;
-      },
-    });
+  _handlePressTitle = () => {
+    this._toggleMenu();
   };
 
-  _updateCacheAfterVote = (store, createVote, linkId) => {
-    const data = store.readQuery({
-      query: ALL_LINKS_QUERY,
-      variables: this.props.allLinksQuery.variables,
-    });
-    const votedLink = data.allLinks.find(link => link.id === linkId);
-    votedLink.votes = createVote.link.votes;
-    store.writeQuery({ query: ALL_LINKS_QUERY, data });
+  _toggleMenu = () => {
+    this.setState(
+      state => ({
+        menuIsVisible: !state.menuIsVisible,
+      }),
+      () => {
+        Animated.spring(this.state.menuAnimatedValue, {
+          toValue: this.state.menuIsVisible ? 1 : 0,
+          speed: 40,
+          bounciness: 0,
+          useNativeDriver: true,
+        }).start();
+      }
+    );
   };
-
-  _handleRefresh = () => {
-    return this.props.allLinksQuery.refetch();
-  };
-
-  _handleLoadMore = () => {
-    this.props.loadMoreLinks();
+  _selectList = list => {
+    this._toggleMenu();
+    this.props.navigation.setParams({ selectedList: list });
   };
 }
 
-export const ALL_LINKS_QUERY = gql`
-  query AllLinksQuery($first: Int, $skip: Int) {
-    allLinks(first: $first, skip: $skip, orderBy: createdAt_DESC) {
-      id
-      createdAt
-      url
-      description
-      score
-      postedBy {
-        id
-        name
-      }
-      votes {
-        id
-        user {
-          id
-        }
-      }
-    }
-    _allLinksMeta {
-      count
-    }
-  }
-`;
-
-export default graphql(ALL_LINKS_QUERY, {
-  name: 'allLinksQuery',
-  options: props => ({
-    variables: {
-      first: LINKS_PER_PAGE,
-      skip: 0,
-    },
-    fetchPolicy: 'network-only',
-  }),
-  props: ({ allLinksQuery }, ownProps) => {
-    let skip = 0;
-    if (allLinksQuery.allLinks) {
-      skip = allLinksQuery.allLinks.length;
-    }
-
-    return {
-      allLinksQuery,
-      ...ownProps,
-      loadMoreLinks: () => {
-        return allLinksQuery.fetchMore({
-          variables: {
-            first: LINKS_PER_PAGE,
-            skip,
-          },
-          updateQuery: (previous, { fetchMoreResult }) => {
-            if (!fetchMoreResult.allLinks) {
-              return previous;
-            }
-            return Object.assign({}, previous, {
-              allLinks: [...previous.allLinks, ...fetchMoreResult.allLinks],
-              _allLinksMeta: fetchMoreResult._allLinksMeta,
-            });
-          },
-        });
-      },
-    };
+const styles = StyleSheet.create({
+  overlay: {
+    backgroundColor: '#000',
+    ...StyleSheet.absoluteFillObject,
   },
-})(LinksScreen);
+  menu: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+  },
+  menuOption: {
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  selectedMenuOption: {
+    backgroundColor: 'rgba(0,0,0,0.05)',
+  },
+  menuText: {
+    fontSize: 16,
+  },
+  selectedMenuText: {
+    color: Colors.orange,
+  },
+});
