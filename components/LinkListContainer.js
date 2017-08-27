@@ -9,12 +9,17 @@ import {
 import { graphql, gql } from 'react-apollo';
 
 import LinkList from './LinkList';
+import getNavigationParam from '../utils/getNavigationParam';
 
 const LINKS_PER_PAGE = 10;
 
-class NewLinksList extends Component {
+class LinkListContainer extends Component {
   componentDidMount() {
     this._subscribeToNewVotes();
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   render() {
@@ -37,7 +42,7 @@ class NewLinksList extends Component {
   }
 
   _subscribeToNewVotes = () => {
-    this.props.allLinksQuery.subscribeToMore({
+    this._unsubscribe = this.props.allLinksQuery.subscribeToMore({
       document: gql`
         subscription {
           Vote(filter: { mutation_in: [CREATED] }) {
@@ -103,8 +108,8 @@ class NewLinksList extends Component {
 }
 
 export const ALL_LINKS_QUERY = gql`
-  query AllLinksQuery($first: Int, $skip: Int) {
-    allLinks(first: $first, skip: $skip, orderBy: createdAt_DESC) {
+  query AllLinksQuery($first: Int, $skip: Int, $orderBy: LinkOrderBy) {
+    allLinks(first: $first, skip: $skip, orderBy: $orderBy) {
       id
       createdAt
       url
@@ -127,12 +132,16 @@ export const ALL_LINKS_QUERY = gql`
   }
 `;
 
+const orderForListType = listType =>
+  listType === 'top' ? 'score_DESC' : 'createdAt_DESC';
+
 export default graphql(ALL_LINKS_QUERY, {
   name: 'allLinksQuery',
   options: props => ({
     variables: {
       first: LINKS_PER_PAGE,
       skip: 0,
+      orderBy: orderForListType(props.listType),
     },
     fetchPolicy: 'network-only',
   }),
@@ -150,6 +159,7 @@ export default graphql(ALL_LINKS_QUERY, {
           variables: {
             first: LINKS_PER_PAGE,
             skip,
+            orderBy: orderForListType(ownProps.listType),
           },
           updateQuery: (previous, { fetchMoreResult }) => {
             if (!fetchMoreResult.allLinks) {
@@ -164,4 +174,4 @@ export default graphql(ALL_LINKS_QUERY, {
       },
     };
   },
-})(NewLinksList);
+})(LinkListContainer);

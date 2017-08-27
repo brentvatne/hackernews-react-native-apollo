@@ -5,7 +5,7 @@ import { graphql, gql } from 'react-apollo';
 import { getUser } from 'react-native-authentication-helpers';
 
 import StyledTextInput from './StyledTextInput';
-import { ALL_LINKS_QUERY } from './NewLinksList';
+import { ALL_LINKS_QUERY } from './LinkListContainer';
 
 class CreateLinkScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -87,12 +87,12 @@ class CreateLinkScreen extends Component {
         try {
           const data = store.readQuery({
             query: ALL_LINKS_QUERY,
-            variables: { skip: 0, first: 10 },
+            variables: { skip: 0, first: 10, orderBy: 'createdAt_DESC' },
           });
           data.allLinks.splice(0, 0, createLink);
           store.writeQuery({
             query: ALL_LINKS_QUERY,
-            variables: { skip: 0, first: 10 },
+            variables: { skip: 0, first: 10, orderBy: 'createdAt_DESC' },
             data,
           });
         } catch (e) {

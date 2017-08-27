@@ -14,8 +14,7 @@ import Touchable from 'react-native-platform-touchable';
 import Colors from '../constants/Colors';
 import HeaderTitle from './HeaderTitle';
 import HeaderActions from './HeaderActions';
-import NewLinksList from './NewLinksList';
-import TopLinksList from './TopLinksList';
+import LinkListContainer from './LinkListContainer';
 import getNavigationParam from '../utils/getNavigationParam';
 
 const DEFAULT_LIST = 'top';
@@ -60,13 +59,6 @@ export default class LinksScreen extends Component {
       DEFAULT_LIST
     );
 
-    let listEl;
-    if (selectedList === 'top') {
-      listEl = <TopLinksList />;
-    } else {
-      listEl = <NewLinksList />;
-    }
-
     let overlayOpacity = this.state.menuAnimatedValue.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 0.4],
@@ -80,7 +72,8 @@ export default class LinksScreen extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-        {listEl}
+        <LinkListContainer listType={selectedList} />
+
         <View
           style={StyleSheet.absoluteFill}
           pointerEvents={this.state.menuIsVisible ? 'auto' : 'none'}>
