@@ -145,7 +145,7 @@ export default graphql(ALL_LINKS_QUERY, {
     },
     fetchPolicy: 'network-only',
   }),
-  props: ({ allLinksQuery }, ownProps) => {
+  props: ({ allLinksQuery, ownProps }) => {
     let skip = 0;
     if (allLinksQuery.allLinks) {
       skip = allLinksQuery.allLinks.length;
