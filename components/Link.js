@@ -24,7 +24,7 @@ class Link extends PureComponent {
               <Text style={styles.number}>
                 {this.props.index + 1}.
               </Text>}
-            <View>
+            <View style={styles.content}>
               <Text style={styles.description}>
                 {this.props.link.description}
               </Text>
@@ -99,8 +99,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  content: {
+    flex: 1,
+  },
   header: {
     paddingTop: 10,
+    paddingRight: 15,
     flexDirection: 'row',
   },
   description: {
