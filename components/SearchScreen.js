@@ -21,7 +21,9 @@ class SearchScreen extends React.Component {
         headerTintColor="#fff"
         onChangeQuery={this._handleQueryChange}
         onSubmit={this._executeSearch}
-        searchInputPlaceholderTextColor={Platform.OS === 'ios' ? "#898989" : "#fafafa"}
+        searchInputPlaceholderTextColor={
+          Platform.OS === 'ios' ? '#898989' : '#fafafa'
+        }
         searchInputUnderlineColorAndroid="#f8f8f8">
         <LinkList
           hideNumbers={true}
@@ -41,9 +43,14 @@ class SearchScreen extends React.Component {
   };
 
   _executeSearch = async () => {
+    const { searchText } = this.state;
+    if (!searchText) {
+      this.setState({ links: [] });
+      return;
+    }
+
     try {
       this.setState({ loading: true });
-      const { searchText } = this.state;
       const result = await this.props.client.query({
         query: ALL_LINKS_SEARCH_QUERY,
         variables: { searchText },

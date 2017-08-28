@@ -109,9 +109,15 @@ class AuthenticationScreen extends Component {
   }
 
   _confirm = async () => {
+    const signUp = inSignUpState(this.props.navigation.state);
     const { name, email, password } = this.state;
+    if (!email || !password || (signUp && !name)) {
+      alert('Please fill in all fields.')
+      return;
+    }
+
     try {
-      if (inSignUpState(this.props.navigation.state)) {
+      if (signUp) {
         const result = await this.props.createUserMutation({
           variables: {
             name,

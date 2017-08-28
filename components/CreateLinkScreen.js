@@ -77,6 +77,12 @@ class CreateLinkScreen extends Component {
     }
 
     const { description, url } = this.state;
+
+    if (!description || !url) {
+      alert('Please fill out both the description and URL fields.')
+      return;
+    }
+
     await this.props.createLinkMutation({
       variables: {
         description,
