@@ -4,6 +4,7 @@ import { gql, graphql } from 'react-apollo';
 import Touchable from 'react-native-platform-touchable';
 import { WebBrowser } from 'expo';
 import { withUser } from 'react-native-authentication-helpers';
+import { maybeAddProtocol, getHostname } from '../utils/url';
 
 import timeDifferenceForDate from '../utils/timeDifferenceForDate';
 
@@ -25,11 +26,11 @@ class Link extends PureComponent {
                 {this.props.index + 1}.
               </Text>}
             <View style={styles.content}>
-              <Text style={styles.description}>
+              <Text style={styles.description} numberOfLines={1}>
                 {this.props.link.description}
               </Text>
               <Text style={styles.url} numberOfLines={1}>
-                {this.props.link.url}
+                {getHostname(this.props.link.url)}
               </Text>
             </View>
           </View>
@@ -59,12 +60,8 @@ class Link extends PureComponent {
   }
 
   _openBrowser = () => {
-    let url = this.props.link.url;
-    if (!url.includes('http')) {
-      alert('Unable to open invalid url');
-    } else {
-      WebBrowser.openBrowserAsync(this.props.link.url);
-    }
+    let url = maybeAddProtocol(this.props.link.url);
+    WebBrowser.openBrowserAsync(url);
   };
 
   _voteForLink = async () => {
