@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 import { graphql, gql } from 'react-apollo';
 
 import LinkList from './LinkList';
-import getNavigationParam from '../utils/getNavigationParam';
+import Link from './Link';
 
 const LINKS_PER_PAGE = 10;
 
@@ -50,20 +43,7 @@ class LinkListContainer extends Component {
               id
               link {
                 id
-                url
-                description
-                createdAt
-                score
-                postedBy {
-                  id
-                  name
-                }
-                votes {
-                  id
-                  user {
-                    id
-                  }
-                }
+                ...LinkFragment
               }
               user {
                 id
@@ -71,6 +51,7 @@ class LinkListContainer extends Component {
             }
           }
         }
+        ${Link.fragments.link}
       `,
       updateQuery: (previous, { subscriptionData }) => {
         const votedLinkIndex = previous.allLinks.findIndex(
@@ -111,25 +92,13 @@ export const ALL_LINKS_QUERY = gql`
   query AllLinksQuery($first: Int, $skip: Int, $orderBy: LinkOrderBy) {
     allLinks(first: $first, skip: $skip, orderBy: $orderBy) {
       id
-      createdAt
-      url
-      description
-      score
-      postedBy {
-        id
-        name
-      }
-      votes {
-        id
-        user {
-          id
-        }
-      }
+      ...LinkFragment
     }
     _allLinksMeta {
       count
     }
   }
+  ${Link.fragments.link}
 `;
 
 const orderForListType = listType =>

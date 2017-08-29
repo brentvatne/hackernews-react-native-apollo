@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, TextInput, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import Button from 'react-native-platform-button';
 import { graphql, gql } from 'react-apollo';
 import { getUser } from 'react-native-authentication-helpers';
 
 import StyledTextInput from './StyledTextInput';
+import Link from './Link';
 import { ALL_LINKS_QUERY } from './LinkListContainer';
 
 class CreateLinkScreen extends Component {
@@ -135,23 +136,10 @@ const CREATE_LINK_MUTATION = gql`
       score: 0
       postedById: $postedById
     ) {
-      id
-      createdAt
-      url
-      description
-      score
-      postedBy {
-        id
-        name
-      }
-      votes {
-        id
-        user {
-          id
-        }
-      }
+      ...LinkFragment
     }
   }
+  ${Link.fragments.link}
 `;
 
 export default graphql(CREATE_LINK_MUTATION, { name: 'createLinkMutation' })(

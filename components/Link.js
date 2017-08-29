@@ -10,6 +10,26 @@ import { maybeAddProtocol, getHostname } from '../utils/url';
 import timeDifferenceForDate from '../utils/timeDifferenceForDate';
 
 class Link extends PureComponent {
+  static fragments = {
+    link: gql`
+      fragment LinkFragment on Link {
+        id
+        url
+        description
+        createdAt
+        postedBy {
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
+      }
+    `,
+  };
+
   render() {
     const { postedBy } = this.props.link;
     const postedByName = (postedBy && postedBy.name) || 'Unknown';

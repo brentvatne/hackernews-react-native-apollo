@@ -1,11 +1,11 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { Constants } from 'expo';
+import { Platform } from 'react-native';
 import SearchLayout from 'react-navigation-addon-search-layout';
 import { gql, withApollo } from 'react-apollo';
 
 import Colors from '../constants/Colors';
 import LinkList from './LinkList';
+import Link from './Link';
 
 class SearchScreen extends React.Component {
   state = {
@@ -76,12 +76,6 @@ class SearchScreen extends React.Component {
   };
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
 const ALL_LINKS_SEARCH_QUERY = gql`
   query AllLinksSearchQuery($searchText: String!) {
     allLinks(
@@ -93,21 +87,10 @@ const ALL_LINKS_SEARCH_QUERY = gql`
       }
     ) {
       id
-      url
-      description
-      createdAt
-      postedBy {
-        id
-        name
-      }
-      votes {
-        id
-        user {
-          id
-        }
-      }
+      ...LinkFragment
     }
   }
+  ${Link.fragments.link}
 `;
 
 export default withApollo(SearchScreen);
