@@ -21,18 +21,17 @@ class SearchScreen extends React.Component {
         headerTintColor="#fff"
         onChangeQuery={this._handleQueryChange}
         onSubmit={this._executeSearch}
+        searchInputSelectionColor="#fff"
+        searchInputTextColor={Platform.OS === 'android' ? "#fff" : 'black'}
         searchInputPlaceholderTextColor={
           Platform.OS === 'ios' ? '#898989' : '#fafafa'
-        }
-        searchInputUnderlineColorAndroid="#f8f8f8">
+        }>
         <LinkList
           hideNumbers={true}
           loading={this.state.loading}
           links={this.state.links}
           error={this.state.error}
-          onVote={() => {
-            /* we will fill this in later! */
-          }}
+          onVote={this._updateCacheAfterVote}
         />
       </SearchLayout>
     );
@@ -40,6 +39,20 @@ class SearchScreen extends React.Component {
 
   _handleQueryChange = searchText => {
     this.setState({ searchText });
+  };
+
+  _updateCacheAfterVote = (store, createVote, linkId) => {
+    const votedLinkId = this.state.links.findIndex(link => link.id === linkId);
+    const votedLink = this.state.links[votedLinkId];
+    let links = [...this.state.links];
+    links[votedLinkId] = {
+      ...votedLink,
+      votes: createVote.link.votes,
+    };
+
+    this.setState({
+      links,
+    });
   };
 
   _executeSearch = async () => {

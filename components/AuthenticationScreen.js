@@ -50,15 +50,17 @@ class AuthenticationScreen extends Component {
           {showSignUpForm &&
             <StyledTextInput
               autoFocus={true}
-              value={this.state.name}
+              blurOnSubmit={false}
               onChangeText={name => this.setState({ name })}
               onSubmitEditing={() => this._emailInput.focus()}
               type="text"
               placeholder="Your name"
+              value={this.state.name}
             />}
           <StyledTextInput
             autoCapitalize="none"
             autoFocus={true}
+            blurOnSubmit={false}
             ref={view => {
               this._emailInput = view;
             }}

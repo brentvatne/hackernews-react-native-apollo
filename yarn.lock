@@ -4469,9 +4469,11 @@ react-native@^0.47.0:
     xtend ">=4.0.0 <4.1.0-0"
     yargs "^6.4.0"
 
-react-navigation-addon-search-layout@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/react-navigation-addon-search-layout/-/react-navigation-addon-search-layout-0.7.0.tgz#83f49e63fc1f9bfea1e1e829075f7d35b0eebbeb"
+react-navigation-addon-search-layout@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-addon-search-layout/-/react-navigation-addon-search-layout-0.8.0.tgz#5b82c70ef73e921555c945c132bd6836ceb8b0c1"
+  dependencies:
+    react-native-platform-touchable "^1.1.1"
 
 react-navigation@1.0.0-beta.12:
   version "1.0.0-beta.12"

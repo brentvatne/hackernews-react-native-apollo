@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   Animated,
+  BackAndroid,
   Platform,
   StyleSheet,
   Text,
@@ -159,7 +160,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   menuOption: {
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
     alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
   },
   selectedMenuOption: {

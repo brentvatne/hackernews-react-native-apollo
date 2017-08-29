@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 10,
     paddingRight: 15,
+    paddingBottom: 15,
     flexDirection: 'row',
   },
   description: {
@@ -138,7 +139,6 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 15,
     backgroundColor: 'rgba(0,0,0,0.01)',
   },
   col: {

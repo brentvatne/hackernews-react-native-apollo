@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
-import { Dimensions, Platform, StyleSheet, View } from 'react-native';
+import { Alert, Dimensions, Platform, StyleSheet, View } from 'react-native';
 import { withUser, clearUser } from 'react-native-authentication-helpers';
 import Button from 'react-native-platform-button';
 
 import HeaderIconButton from './HeaderIconButton';
 const isSmallDevice = Dimensions.get('window').width < 375;
+
+function promptSignOut() {
+  Alert.alert(
+    'Confirm',
+    'Are you sure you want to sign out?',
+    [
+      { text: 'Sign out', onPress: clearUser },
+      { text: 'Cancel', style: 'cancel' },
+    ],
+    { cancelable: true }
+  );
+}
 
 class HeaderActionsRight extends Component {
   render() {
@@ -18,14 +30,18 @@ class HeaderActionsRight extends Component {
             onPress={() => navigate('CreateLink')}
           />}
 
-        <HeaderIconButton name="search" onPress={() => navigate('Search')} />
-
-        {Platform.OS === 'android' &&
-          !this.props.user &&
+        {!this.props.user &&
+          Platform.OS === 'android' &&
           <HeaderIconButton
             name="authenticate"
             onPress={() => navigate('Authentication')}
           />}
+
+        {this.props.user &&
+          Platform.OS === 'android' &&
+          <HeaderIconButton name="user" onPress={promptSignOut} />}
+
+        <HeaderIconButton name="search" onPress={() => navigate('Search')} />
       </View>
     );
   }

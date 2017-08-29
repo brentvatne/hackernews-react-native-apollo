@@ -17,6 +17,16 @@ export default class HeaderTitle extends PureComponent {
         style={styles.container}
         activeOpacity={0.7}
         onPress={this.props.onPress}>
+        {Platform.OS === 'ios'
+          ? this._renderTitleIOS(listName)
+          : this._renderTitleAndroid(listName)}
+      </TouchableOpacity>
+    );
+  }
+
+  _renderTitleIOS(listName) {
+    return (
+      <View style={{ justifyContent: 'center' }}>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.title}>Hacker News</Text>
           <Text style={styles.arrow}>▼</Text>
@@ -24,7 +34,18 @@ export default class HeaderTitle extends PureComponent {
         <Text style={styles.subtitle}>
           {listName} Links
         </Text>
-      </TouchableOpacity>
+      </View>
+    );
+  }
+
+  _renderTitleAndroid(listName) {
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={styles.title}>
+          {listName} Links
+        </Text>
+        <Text style={styles.arrow}>▼</Text>
+      </View>
     );
   }
 }
@@ -32,15 +53,8 @@ export default class HeaderTitle extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingLeft: Platform.OS === 'ios' ? 0 : 20,
     justifyContent: 'center',
-    ...Platform.select({
-      ios: {
-        alignItems: 'center',
-      },
-      android: {
-        paddingLeft: 15,
-      },
-    }),
   },
   title: {
     color: '#fff',
@@ -55,14 +69,15 @@ const styles = StyleSheet.create({
     }),
   },
   arrow: {
-    fontSize: Platform.OS === 'ios' ? 10 : 15,
-    alignSelf: 'center',
+    fontSize: Platform.OS === 'ios' ? 10 : 12,
     marginLeft: Platform.OS === 'ios' ? 3 : 5,
+    alignSelf: 'center',
     color: '#fff',
   },
   subtitle: {
     fontSize: 13,
     color: '#eee',
-    marginTop: Platform.OS === 'ios' ? -1 : -3,
+    marginTop: -1,
+    textAlign: 'center',
   },
 });

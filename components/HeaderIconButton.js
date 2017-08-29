@@ -62,12 +62,16 @@ const IconNames = {
     name: 'md-key',
     size: 25,
   },
+  user: {
+    name: 'md-person',
+    size: 25,
+  },
 };
 
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 15,
     paddingHorizontal: 5,
-    marginLeft: Platform.OS === 'ios' ? 12 : 15,
+    marginLeft: Platform.OS === 'ios' ? 12 : 17,
   },
 });
