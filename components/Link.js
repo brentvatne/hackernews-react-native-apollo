@@ -4,8 +4,9 @@ import { gql, graphql } from 'react-apollo';
 import Touchable from 'react-native-platform-touchable';
 import { WebBrowser } from 'expo';
 import { withUser } from 'react-native-authentication-helpers';
-import { maybeAddProtocol, getHostname } from '../utils/url';
 
+import Colors from '../constants/Colors';
+import { maybeAddProtocol, getHostname } from '../utils/url';
 import timeDifferenceForDate from '../utils/timeDifferenceForDate';
 
 class Link extends PureComponent {
@@ -15,11 +16,11 @@ class Link extends PureComponent {
     const showNumbers = !this.props.hideNumbers;
 
     return (
-      <Touchable
-        style={styles.button}
-        onPress={this._openBrowser}
-        delayPressIn={130}>
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <Touchable
+          delayPressIn={130}
+          style={styles.button}
+          onPress={this._openBrowser}>
           <View style={styles.header}>
             {showNumbers &&
               <Text style={styles.number}>
@@ -34,28 +35,33 @@ class Link extends PureComponent {
               </Text>
             </View>
           </View>
+        </Touchable>
 
-          <View style={styles.footer}>
-            <Touchable
-              onPress={this.props.user && this._voteForLink}
-              style={styles.col}>
-              <Text style={styles.meta} numberOfLines={1}>
-                {this.props.user && '▲'} {this.props.link.votes.length} votes
-              </Text>
-            </Touchable>
-            <View style={[styles.col, styles.centerCol]}>
-              <Text style={styles.meta} numberOfLines={1}>
-                by {postedByName}
-              </Text>
-            </View>
-            <View style={styles.col}>
-              <Text style={styles.meta} numberOfLines={1}>
-                {timeDifferenceForDate(this.props.link.createdAt)}
-              </Text>
-            </View>
+        <View style={styles.footer}>
+          <Touchable
+            onPress={this.props.user && this._voteForLink}
+            style={styles.col}>
+            <Text
+              style={[
+                styles.meta,
+                this._userVotedForLink() && styles.metaHighlight,
+              ]}
+              numberOfLines={1}>
+              {this.props.user && '▲'} {this.props.link.votes.length} votes
+            </Text>
+          </Touchable>
+          <View style={[styles.col, styles.centerCol]}>
+            <Text style={styles.meta} numberOfLines={1}>
+              by {postedByName}
+            </Text>
+          </View>
+          <View style={styles.col}>
+            <Text style={styles.meta} numberOfLines={1}>
+              {timeDifferenceForDate(this.props.link.createdAt)}
+            </Text>
           </View>
         </View>
-      </Touchable>
+      </View>
     );
   }
 
@@ -64,11 +70,20 @@ class Link extends PureComponent {
     WebBrowser.openBrowserAsync(url);
   };
 
+  _userVotedForLink = () => {
+    if (!this.props.user) {
+      return false;
+    }
+
+    return !!this.props.link.votes.find(
+      vote => vote.user.id === this.props.user.id
+    );
+  };
+
   _voteForLink = async () => {
     const userId = this.props.user.id;
-    const voterIds = this.props.link.votes.map(vote => vote.user.id);
-    if (voterIds.includes(userId)) {
-      console.log(`User (${userId}) already voted for this link.`);
+    if (this._userVotedForLink()) {
+      console.log(`User already voted for this link.`);
       return;
     }
 
@@ -86,15 +101,12 @@ class Link extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-  button: {
+  container: {
     backgroundColor: '#f9f9f9',
     marginTop: 5,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: '#eee',
     justifyContent: 'flex-start',
-  },
-  container: {
-    flex: 1,
   },
   content: {
     flex: 1,
@@ -145,6 +157,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#a6a6a6',
     paddingHorizontal: 10,
+  },
+  metaHighlight: {
+    color: Colors.orange,
   },
   url: {
     fontSize: 13,
