@@ -82,7 +82,7 @@ class AuthenticationScreen extends Component {
             blurOnSubmit={true}
             secureTextEntry={true}
             type="password"
-            placeholder="Choose a safe password"
+            placeholder={showSignUpForm ? 'Choose a safe password' : 'Password'}
             value={this.state.password}
           />
         </View>
