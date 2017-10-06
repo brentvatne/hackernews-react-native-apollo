@@ -3,6 +3,8 @@ import { Platform, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 import Touchable from 'react-native-platform-touchable';
 
+import Colors from '../constants/Colors';
+
 export default class HeaderIconButton extends Component {
   render() {
     let presetIconName = this.props.name;
@@ -22,12 +24,12 @@ export default class HeaderIconButton extends Component {
           left: 10,
           right: 10,
         }}
-        background={Touchable.Ripple('#fff', true)}
+        background={Touchable.Ripple(Colors.white, true)}
         style={styles.button}
         onPress={this.props.onPress}>
         <Icon.Ionicons
           name={presetIconName}
-          style={{ color: '#fff' }}
+          style={{ color: Colors.white }}
           size={presetIconSize}
         />
       </Touchable>

@@ -102,10 +102,10 @@ class Link extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: Colors.almostWhite,
     marginTop: 5,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: '#eee',
+    borderColor: Colors.lightGrey,
     justifyContent: 'flex-start',
   },
   button: {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   number: {
     fontSize: 17,
     lineHeight: 25,
-    color: '#a6a6a6',
+    color: Colors.mediumGrey,
     fontWeight: Platform.OS === 'ios' ? '500' : '400',
   },
   upvoteButton: {
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'rgba(0,0,0,0.01)',
+    backgroundColor: Colors.almostWhiteDarkened,
   },
   col: {
     flex: 1,
@@ -153,11 +153,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderLeftWidth: StyleSheet.hairlineWidth,
     borderRightWidth: StyleSheet.hairlineWidth,
-    borderColor: '#dcdcdc',
+    borderColor: Colors.grey,
   },
   meta: {
     fontSize: 12,
-    color: '#a6a6a6',
+    color: Colors.mediumGrey,
     paddingHorizontal: 10,
   },
   metaHighlight: {
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   url: {
     fontSize: 13,
-    color: '#888',
+    color: Colors.darkGrey,
   },
 });
 

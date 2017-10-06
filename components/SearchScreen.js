@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { Constants } from 'expo';
 import SearchLayout from 'react-navigation-addon-search-layout';
 import { gql, withApollo } from 'react-apollo';
@@ -75,12 +75,6 @@ class SearchScreen extends React.Component {
     }
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 const ALL_LINKS_SEARCH_QUERY = gql`
   query AllLinksSearchQuery($searchText: String!) {

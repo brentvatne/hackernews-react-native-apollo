@@ -7,6 +7,8 @@ import {
   View,
 } from 'react-native';
 
+import Colors from '../constants/Colors';
+
 export default class HeaderTitle extends PureComponent {
   render() {
     let { selectedList } = this.props;
@@ -31,9 +33,7 @@ export default class HeaderTitle extends PureComponent {
           <Text style={styles.title}>Hacker News</Text>
           <Text style={styles.arrow}>▼</Text>
         </View>
-        <Text style={styles.subtitle}>
-          {listName} Links
-        </Text>
+        <Text style={styles.subtitle}>{listName} Links</Text>
       </View>
     );
   }
@@ -41,9 +41,7 @@ export default class HeaderTitle extends PureComponent {
   _renderTitleAndroid(listName) {
     return (
       <View style={{ flexDirection: 'row' }}>
-        <Text style={styles.title}>
-          {listName} Links
-        </Text>
+        <Text style={styles.title}>{listName} Links</Text>
         <Text style={styles.arrow}>▼</Text>
       </View>
     );
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    color: '#fff',
+    color: Colors.white,
     ...Platform.select({
       ios: {
         fontSize: 17,
@@ -72,11 +70,11 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === 'ios' ? 10 : 12,
     marginLeft: Platform.OS === 'ios' ? 3 : 5,
     alignSelf: 'center',
-    color: '#fff',
+    color: Colors.white,
   },
   subtitle: {
     fontSize: 13,
-    color: '#eee',
+    color: Colors.lightGrey,
     marginTop: -1,
     textAlign: 'center',
   },

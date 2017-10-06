@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { graphql, gql } from 'react-apollo';
 
+import Colors from '../constants/Colors';
 import LinkList from './LinkList';
 
 const LINKS_PER_PAGE = 10;
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   },
   noLinksText: {
     fontSize: 16,
-    color: '#888',
+    color: Colors.darkGrey,
     textAlign: 'center',
   },
 });

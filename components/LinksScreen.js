@@ -172,7 +172,7 @@ export default class LinksScreen extends Component {
 
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.black,
     ...StyleSheet.absoluteFillObject,
   },
   menu: {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
   menuOption: {
     paddingHorizontal: 20,
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
   },
   selectedMenuOption: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    backgroundColor: Colors.almostWhite,
   },
   menuText: {
     fontSize: 16,

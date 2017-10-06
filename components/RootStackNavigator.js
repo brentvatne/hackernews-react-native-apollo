@@ -23,15 +23,15 @@ const MainStack = StackNavigator(
   {
     initialRouteName: 'Links',
     cardStyle: {
-      backgroundColor: '#fafafa',
+      backgroundColor: Colors.almostWhite,
     },
     navigationOptions: () => ({
       headerBackTitle: 'Back',
-      headerPressColorAndroid: '#fff',
+      headerPressColorAndroid: Colors.white,
       headerStyle: {
         backgroundColor: Colors.orange,
       },
-      headerTintColor: '#fff',
+      headerTintColor: Colors.white,
     }),
   }
 );
@@ -48,7 +48,7 @@ export default StackNavigator(
   {
     initialRouteName: 'Main',
     cardStyle: {
-      backgroundColor: '#fafafa',
+      backgroundColor: Colors.almostWhite,
     },
     headerMode: 'none',
     transitionConfig: () => ({
