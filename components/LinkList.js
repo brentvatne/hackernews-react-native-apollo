@@ -34,14 +34,8 @@ export default class LinkList extends Component {
       );
     }
 
-    if (!this.props.links.length) {
-      return (
-        <View style={styles.noLinksContainer}>
-          <Text style={styles.noLinksText}>
-            No links have been posted yet! Sign in and post one to be the first.
-          </Text>
-        </View>
-      )
+    if (!this.props.links.length && this.props.renderEmptyList) {
+      return this.props.renderEmptyList();
     }
 
     return (
@@ -51,13 +45,14 @@ export default class LinkList extends Component {
         onRefresh={this.props.onRefresh}
         refreshing={!!this.props.refreshing}
         ListFooterComponent={this._renderFooter}
-        renderItem={({ item, index }) =>
+        renderItem={({ item, index }) => (
           <Link
             hideNumbers={this.props.hideNumbers}
             updateStoreAfterVote={this.props.onVote}
             index={index}
             link={item}
-          />}
+          />
+        )}
         style={styles.container}
         contentContainerStyle={styles.content}
       />
@@ -106,15 +101,4 @@ const styles = StyleSheet.create({
   loadMoreText: {
     color: '#888',
   },
-  noLinksContainer: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 35,
-    paddingHorizontal: 30,
-  },
-  noLinksText: {
-    fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
-  }
 });
