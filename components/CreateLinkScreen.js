@@ -5,23 +5,19 @@ import { graphql, gql } from 'react-apollo';
 import { getUser } from 'react-native-authentication-helpers';
 
 import StyledTextInput from './StyledTextInput';
+import getNavigationParam from '../utils/getNavigationParam';
 import { ALL_LINKS_QUERY } from './LinkListContainer';
 
 class CreateLinkScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
-    let onDonePress = params ? params.onDonePress : () => {};
+    const onDonePress = getNavigationParam(navigation, 'onDonePress', () => {});
 
     return {
       title: 'New Link',
-      headerRight:
-        Platform.OS === 'ios' &&
-        <Button
-          fontSize={17}
-          color="#fff"
-          title="Done"
-          onPress={onDonePress}
-        />,
+      headerRight: Platform.OS === 'ios' && (
+        <Button fontSize={17} color="#fff" title="Done" onPress={onDonePress} />
+      ),
     };
   };
 
@@ -61,10 +57,11 @@ class CreateLinkScreen extends Component {
           value={this.state.url}
         />
 
-        {Platform.OS === 'android' &&
+        {Platform.OS === 'android' && (
           <View style={styles.buttonContainer}>
             <Button color="#000" title="Submit" onPress={this._createLink} />
-          </View>}
+          </View>
+        )}
       </View>
     );
   }
@@ -79,7 +76,7 @@ class CreateLinkScreen extends Component {
     const { description, url } = this.state;
 
     if (!description || !url) {
-      alert('Please fill out both the description and URL fields.')
+      alert('Please fill out both the description and URL fields.');
       return;
     }
 
@@ -109,6 +106,7 @@ class CreateLinkScreen extends Component {
       },
     });
 
+    this.props.navigation.state.params.onCreateLink();
     this.props.navigation.goBack();
   };
 }

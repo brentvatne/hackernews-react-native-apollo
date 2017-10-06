@@ -9,7 +9,6 @@ import {
 import { graphql, gql } from 'react-apollo';
 
 import LinkList from './LinkList';
-import getNavigationParam from '../utils/getNavigationParam';
 
 const LINKS_PER_PAGE = 10;
 
