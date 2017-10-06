@@ -54,23 +54,15 @@ export default class App extends React.Component {
     appIsReady: false,
   };
 
-  componentDidMount() {
-    this._loadAppDataAsync();
-  }
-
-  _loadAppDataAsync = async () => {
-    try {
-      await loadUserAsync();
-    } catch (e) {
-      console.warn('Unable to load user data from disk');
-    } finally {
-      this.setState({ appIsReady: true });
-    }
-  };
-
   render() {
     if (!this.state.appIsReady) {
-      return <AppLoading />;
+      return (
+        <AppLoading
+          startAsync={loadUserAsync}
+          onError={console.warn}
+          onFinish={() => this.setState({ appIsReady: true })}
+        />
+      );
     }
 
     return (

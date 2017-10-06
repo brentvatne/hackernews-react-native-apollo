@@ -108,8 +108,12 @@ const styles = StyleSheet.create({
     borderColor: '#eee',
     justifyContent: 'flex-start',
   },
+  button: {
+    paddingLeft: 15,
+  },
   content: {
     flex: 1,
+    paddingLeft: 5,
   },
   header: {
     paddingTop: 10,
@@ -122,14 +126,12 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     fontWeight: Platform.OS === 'ios' ? '500' : '400',
     paddingRight: 5,
-    paddingLeft: 10,
   },
   number: {
     fontSize: 17,
     lineHeight: 25,
     color: '#a6a6a6',
     fontWeight: Platform.OS === 'ios' ? '500' : '400',
-    marginLeft: 10,
   },
   upvoteButton: {
     alignItems: 'center',
@@ -164,7 +166,6 @@ const styles = StyleSheet.create({
   url: {
     fontSize: 13,
     color: '#888',
-    paddingLeft: 10,
   },
 });
 
