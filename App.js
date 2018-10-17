@@ -12,9 +12,10 @@ import { AppLoading } from 'expo';
 import { getUser, loadUserAsync } from 'react-native-authentication-helpers';
 
 import HackerNews from './components/HackerNews';
+import Graphcool from './constants/Graphcool';
 
 const networkInterface = createNetworkInterface({
-  uri: 'https://api.graph.cool/simple/v1/cj6nypgtb224m0143b2gstire',
+  uri: Graphcool.simpleEndpoint,
 });
 
 networkInterface.use([
@@ -30,15 +31,12 @@ networkInterface.use([
   },
 ]);
 
-const wsClient = new SubscriptionClient(
-  'wss://subscriptions.us-west-2.graph.cool/v1/cj6nypgtb224m0143b2gstire',
-  {
-    reconnect: true,
-    connectionParams: {
-      authToken: getUser() && getUser().token,
-    },
-  }
-);
+const wsClient = new SubscriptionClient(Graphcool.subscriptionEndpoint, {
+  reconnect: true,
+  connectionParams: {
+    authToken: getUser() && getUser().token,
+  },
+});
 
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
   networkInterface,
@@ -54,23 +52,15 @@ export default class App extends React.Component {
     appIsReady: false,
   };
 
-  componentDidMount() {
-    this._loadAppDataAsync();
-  }
-
-  _loadAppDataAsync = async () => {
-    try {
-      await loadUserAsync();
-    } catch (e) {
-      console.warn('Unable to load user data from disk');
-    } finally {
-      this.setState({ appIsReady: true });
-    }
-  };
-
   render() {
     if (!this.state.appIsReady) {
-      return <AppLoading />;
+      return (
+        <AppLoading
+          startAsync={loadUserAsync}
+          onError={console.warn}
+          onFinish={() => this.setState({ appIsReady: true })}
+        />
+      );
     }
 
     return (

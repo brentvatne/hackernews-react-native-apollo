@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         padding: 15,
-        backgroundColor: '#fff',
-        borderColor: '#eee',
+        backgroundColor: Colors.white,
+        borderColor: Colors.lightGrey,
         borderWidth: 1,
         borderBottomWidth: 0,
       },

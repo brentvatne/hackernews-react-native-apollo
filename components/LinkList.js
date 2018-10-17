@@ -34,6 +34,10 @@ export default class LinkList extends Component {
       );
     }
 
+    if (!this.props.links.length && this.props.renderEmptyList) {
+      return this.props.renderEmptyList();
+    }
+
     return (
       <FlatList
         data={this.props.links}
@@ -41,13 +45,14 @@ export default class LinkList extends Component {
         onRefresh={this.props.onRefresh}
         refreshing={!!this.props.refreshing}
         ListFooterComponent={this._renderFooter}
-        renderItem={({ item, index }) =>
+        renderItem={({ item, index }) => (
           <Link
             hideNumbers={this.props.hideNumbers}
             updateStoreAfterVote={this.props.onVote}
             index={index}
             link={item}
-          />}
+          />
+        )}
         style={styles.container}
         contentContainerStyle={styles.content}
       />
@@ -70,7 +75,7 @@ export default class LinkList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e8e8e8',
+    backgroundColor: Colors.backgroundGrey,
   },
   content: {
     paddingBottom: 5,
@@ -82,18 +87,18 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 5,
-    color: '#888',
+    color: Colors.darkGrey,
   },
   loadMoreButton: {
     marginTop: 5,
     paddingVertical: 15,
-    backgroundColor: '#f9f9f9',
-    borderColor: '#eee',
+    backgroundColor: Colors.almostWhite,
+    borderColor: Colors.lightGrey,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
   },
   loadMoreText: {
-    color: '#888',
+    color: Colors.darkGrey,
   },
 });

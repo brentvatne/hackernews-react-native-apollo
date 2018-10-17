@@ -19,21 +19,36 @@ import LinkListContainer from './LinkListContainer';
 import getNavigationParam from '../utils/getNavigationParam';
 
 const DEFAULT_LIST = 'top';
+const LIST_AFTER_CREATE = 'new';
 
 export default class LinksScreen extends Component {
   static navigationOptions = props => {
-    let onPressTitle = getNavigationParam(props.navigation, 'onPressTitle');
-    let selectedList = getNavigationParam(
+    const onPressTitle = getNavigationParam(props.navigation, 'onPressTitle');
+    const selectedList = getNavigationParam(
       props.navigation,
       'selectedList',
       DEFAULT_LIST
     );
 
+    const handleCreateLink = () => {
+      const selectList = getNavigationParam(
+        props.navigation,
+        'selectList',
+        () => {}
+      );
+      selectList(LIST_AFTER_CREATE);
+    };
+
     return {
       headerTitle: (
         <HeaderTitle onPress={onPressTitle} selectedList={selectedList} />
       ),
-      headerRight: <HeaderActions.Right navigation={props.navigation} />,
+      headerRight: (
+        <HeaderActions.Right
+          navigation={props.navigation}
+          onCreateLink={handleCreateLink}
+        />
+      ),
       ...Platform.select({
         ios: {
           headerLeft: <HeaderActions.Left navigation={props.navigation} />,
@@ -50,6 +65,7 @@ export default class LinksScreen extends Component {
   componentDidMount() {
     this.props.navigation.setParams({
       onPressTitle: this._handlePressTitle,
+      selectList: this._selectList,
     });
   }
 
@@ -141,15 +157,22 @@ export default class LinksScreen extends Component {
       }
     );
   };
+
+  _hideMenu = () => {
+    if (this.state.menuIsVisible) {
+      this._toggleMenu();
+    }
+  };
+
   _selectList = list => {
-    this._toggleMenu();
+    this._hideMenu();
     this.props.navigation.setParams({ selectedList: list });
   };
 }
 
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.black,
     ...StyleSheet.absoluteFillObject,
   },
   menu: {
@@ -157,7 +180,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
   menuOption: {
     paddingHorizontal: 20,
@@ -165,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
   },
   selectedMenuOption: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    backgroundColor: Colors.almostWhite,
   },
   menuText: {
     fontSize: 16,

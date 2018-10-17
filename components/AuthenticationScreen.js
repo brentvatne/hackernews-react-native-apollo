@@ -18,14 +18,14 @@ class AuthenticationScreen extends Component {
 
     return {
       title: inSignUpState(navigation.state) ? 'Sign Up' : 'Sign In',
-      headerRight:
-        Platform.OS === 'ios' &&
+      headerRight: Platform.OS === 'ios' && (
         <Button
           fontSize={17}
           color="#fff"
           title="Submit"
           onPress={onSubmitPress}
-        />,
+        />
+      ),
     };
   };
 
@@ -47,20 +47,19 @@ class AuthenticationScreen extends Component {
     return (
       <ScrollView keyboardShouldPersistTaps="always" style={styles.container}>
         <View style={styles.formInputGroup}>
-          {showSignUpForm &&
+          {showSignUpForm && (
             <StyledTextInput
               autoFocus={true}
-              blurOnSubmit={false}
               onChangeText={name => this.setState({ name })}
               onSubmitEditing={() => this._emailInput.focus()}
               type="text"
               placeholder="Your name"
               value={this.state.name}
-            />}
+            />
+          )}
           <StyledTextInput
             autoCapitalize="none"
             autoFocus={true}
-            blurOnSubmit={false}
             ref={view => {
               this._emailInput = view;
             }}
@@ -79,21 +78,21 @@ class AuthenticationScreen extends Component {
             }}
             onChangeText={password => this.setState({ password })}
             onSubmitEditing={this._confirm}
-            blurOnSubmit={true}
             secureTextEntry={true}
             type="password"
-            placeholder="Choose a safe password"
+            placeholder={showSignUpForm ? 'Choose a safe password' : 'Password'}
             value={this.state.password}
           />
         </View>
 
         <View style={styles.buttonGroup}>
-          {Platform.OS === 'android' &&
+          {Platform.OS === 'android' && (
             <Button
               color="#000"
               onPress={this._confirm}
               title={showSignUpForm ? 'Create account' : 'Login'}
-            />}
+            />
+          )}
           <View style={styles.buttonSeparator} />
           <Button
             color={Platform.OS === 'android' ? '#000' : Colors.orange}
@@ -114,7 +113,7 @@ class AuthenticationScreen extends Component {
     const signUp = inSignUpState(this.props.navigation.state);
     const { name, email, password } = this.state;
     if (!email || !password || (signUp && !name)) {
-      alert('Please fill in all fields.')
+      alert('Please fill in all fields.');
       return;
     }
 

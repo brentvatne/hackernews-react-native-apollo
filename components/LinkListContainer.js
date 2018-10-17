@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { graphql, gql } from 'react-apollo';
 
+import Colors from '../constants/Colors';
 import LinkList from './LinkList';
 import Link from './Link';
 
@@ -30,6 +31,14 @@ class LinkListContainer extends Component {
         onLoadMore={this._handleLoadMore}
         onRefresh={this._handleRefresh}
         onVote={this._updateCacheAfterVote}
+        renderEmptyList={() => (
+          <View style={styles.noLinksContainer}>
+            <Text style={styles.noLinksText}>
+              No links have been posted yet! Sign in and post one to be the
+              first.
+            </Text>
+          </View>
+        )}
       />
     );
   }
@@ -103,6 +112,20 @@ export const ALL_LINKS_QUERY = gql`
 
 const orderForListType = listType =>
   listType === 'top' ? 'score_DESC' : 'createdAt_DESC';
+
+const styles = StyleSheet.create({
+  noLinksContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 35,
+    paddingHorizontal: 30,
+  },
+  noLinksText: {
+    fontSize: 16,
+    color: Colors.darkGrey,
+    textAlign: 'center',
+  },
+});
 
 export default graphql(ALL_LINKS_QUERY, {
   name: 'allLinksQuery',
