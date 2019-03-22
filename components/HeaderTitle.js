@@ -29,7 +29,7 @@ export default class HeaderTitle extends PureComponent {
   _renderTitleIOS(listName) {
     return (
       <View style={{ justifyContent: 'center' }}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <Text style={styles.title}>Hacker News</Text>
           <Text style={styles.arrow}>▼</Text>
         </View>

@@ -97,7 +97,8 @@ class AuthenticationScreen extends Component {
           <Button
             color={Platform.OS === 'android' ? '#000' : Colors.orange}
             onPress={() =>
-              this.props.navigation.setParams({ signUp: !showSignUpForm })}
+              this.props.navigation.setParams({ signUp: !showSignUpForm })
+            }
             title={
               showSignUpForm
                 ? 'Already have an account?'

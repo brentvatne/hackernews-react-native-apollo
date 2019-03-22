@@ -28,7 +28,7 @@ class HeaderActionsRight extends Component {
       <View style={styles.container}>
         {this.props.user && (
           <HeaderIconButton
-            name="create"
+            name="ios-create"
             onPress={() => navigate('CreateLink', { onCreateLink })}
           />
         )}

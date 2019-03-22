@@ -41,11 +41,11 @@ const IconNames = {
   ...Platform.select({
     ios: {
       create: {
-        name: 'ios-add-outline',
+        name: 'ios-add',
         size: 33,
       },
       search: {
-        name: 'ios-search-outline',
+        name: 'ios-search',
         size: 25,
       },
     },
@@ -72,8 +72,7 @@ const IconNames = {
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 15,
-    paddingHorizontal: 5,
+    paddingRight: 5,
     marginLeft: Platform.OS === 'ios' ? 12 : 17,
   },
 });

@@ -34,7 +34,7 @@ export default class LinkList extends Component {
       );
     }
 
-    if (!this.props.links.length && this.props.renderEmptyList) {
+    if (!this.props.links || (!this.props.links.length && this.props.renderEmptyList)) {
       return this.props.renderEmptyList();
     }
 
